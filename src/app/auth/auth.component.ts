@@ -13,8 +13,6 @@ export class AuthButtonComponent {
   ngOnInit(): void {
     this.auth.user$.subscribe((userSub) => {
       this.user = userSub;
-      console.log("User sub");
-      
     });
   }
 

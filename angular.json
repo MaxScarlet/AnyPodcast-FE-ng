@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "rewrite-any-podcast": {
+    "any-podcast-ng": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/rewrite-any-podcast",
+            "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -23,7 +23,22 @@
             "scripts": []
           },
           "configurations": {
-            "production": {
+            "local": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            },
+            "prod": {
+              "outputPath": "dist_prod",
+              "fileReplacements": [
+                {
+                  "replace": "src/environment.ts",
+                  "with": "src/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
@@ -39,6 +54,7 @@
               "outputHashing": "all"
             },
             "dev": {
+              "outputPath": "dist_dev",
               "fileReplacements": [
                 {
                   "replace": "src/environment.ts",
@@ -53,6 +69,7 @@
               "namedChunks": true
             },
             "stg": {
+              "outputPath": "dist_stg",
               "fileReplacements": [
                 {
                   "replace": "src/environment.ts",
@@ -74,24 +91,27 @@
               "outputHashing": "all"
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "local"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "production": {
-              "browserTarget": "rewrite-any-podcast:build:production"
+            "local": {
+              "browserTarget": "any-podcast-ng:build:local"
             },
-            "development": {
-              "browserTarget": "rewrite-any-podcast:build:development"
+            "prod": {
+              "browserTarget": "any-podcast-ng:build:prod"
+            },
+            "dev": {
+              "browserTarget": "any-podcast-ng:build:dev"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "local"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "rewrite-any-podcast:build"
+            "browserTarget": "any-podcast-ng:build"
           }
         },
         "test": {

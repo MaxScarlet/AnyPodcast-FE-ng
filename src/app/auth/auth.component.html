@@ -1,10 +1,6 @@
 <ng-container *ngIf="auth.isAuthenticated$ | async; else loggedOut">
   <span>Hello, {{ user.nickname }}</span>
-  <button
-    (click)="
-      auth.logout({ logoutParams: { returnTo: document.location.origin } })
-    "
-  >
+  <button (click)="auth.logout()">
     🔓
   </button>
 </ng-container>
