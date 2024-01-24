@@ -1,0 +1,9 @@
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.auth-button-container {
+  margin-left: auto; /* Push the auth button to the right */
+}
