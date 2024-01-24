@@ -1,10 +1,16 @@
 {
-  "name": "rewrite-any-podcast",
+  "name": "any-podcast-ng",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ng serve --port 3060",
+    "start_dev": "ng serve --port 3060 --configuration=dev",
+    "build": "rm -rf dist/* && ng build",
+    "host": "mv dist D:/dev/_Projects/_StaticHost/$npm_package_name",
+    "build_n_host": "npm run build && npm run host",
+    "build_dev": "ng build --configuration=dev",
+    "build_stg": "ng build --configuration=stg",
+    "build_stg_": "ng build --configuration=stg --base-href /any-podcast-ng/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -18,6 +24,8 @@
     "@angular/platform-browser": "^16.2.0",
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
+    "@auth0/auth0-angular": "^2.2.3",
+    "axios": "^1.6.5",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"

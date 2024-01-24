@@ -1,0 +1,14 @@
+.episode-container {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.episode-title {
+  color: #333;
+  font-size: 1.2em;
+}
+
+.episode-description {
+  color: #666;
+}
