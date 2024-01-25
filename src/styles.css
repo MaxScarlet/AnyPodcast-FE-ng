@@ -1,1 +1,110 @@
 /* You can add global styles to this file, and also import other style files */
+
+:root {
+  --primary-color: #881719;
+  --accent-color: #f08080;
+  --background-color: #ededed;
+  --text-color: #333333;
+  --border-color: #bfbfbf;
+
+  --btn-color: #5f0f11;
+  --btn-color-hover: #881719;
+  --btn-color-disable: #595959;
+
+  --menu-bg-color: #c7c7c7;
+  --menu-color: #2c2d2d;
+  --menu-color-active: #881719;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+body {
+  background-color: var(--background-color);
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+}
+
+a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+button {
+  padding: 10px;
+  background-color: var(--btn-color);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+button:hover {
+  background-color: var(--btn-color-hover);
+}
+
+.podcast-item {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.podcast-item:hover {
+  background-color: #f0f0f0;
+}
+
+.footer {
+  background-color: var(--menu-bg-color);
+  color: var(--menu-color);
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.footer a {
+  color: var(--menu-color-active);
+}
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}

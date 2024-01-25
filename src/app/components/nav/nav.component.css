@@ -1,0 +1,28 @@
+.menu {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  background-color: var(--menu-bg-color);
+  padding: 10px;
+}
+
+.menuItem {
+  margin-right: 10px;
+  display: block;
+  cursor: pointer;
+
+  color: var(--menu-color);
+  font-weight: bold;
+  padding: 15px 10px 0px 10px;
+  float: left;
+}
+
+.menuItem.active {
+  color: var(--menu-color-active);
+}
+
+.img_logo {
+  cursor: pointer;
+  height: 47px;
+  float: left;
+}

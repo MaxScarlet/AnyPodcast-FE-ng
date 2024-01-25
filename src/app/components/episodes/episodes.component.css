@@ -1,0 +1,41 @@
+/* EpisodeList.css */
+.list-container {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    padding: 20px;
+    /* margin: 0 auto; */
+    max-width: 70%;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    background-color: var(--menu-bg-color);
+    color: var(--menu-color);
+    align-items: center;
+    justify-content: space-between;
+}
+
+li button {
+    background-color: var(--btn-color);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+li button:hover {
+    background-color: var(--btn-color-hover);
+}
+
+li button:disabled {
+    background-color: var(--btn-color-disable);
+    cursor: not-allowed;
+}

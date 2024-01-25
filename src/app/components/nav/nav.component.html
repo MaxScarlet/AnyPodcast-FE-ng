@@ -1,0 +1,21 @@
+<nav class="menu">
+  <div>
+    <img
+      routerLink="/"
+      class="img_logo"
+      src="assets/images/Logo_r_b_tr.png"
+      alt="anyPodcast"
+      title="anyPodcast"
+    />
+    <ng-container *ngIf="auth.isAuthenticated$ | async">
+      <div class="menuItem" routerLink="/dashboard" routerLinkActive="active">Dashboard</div>
+      <div class="menuItem" routerLink="/episodes" routerLinkActive="active">Episodes</div>
+      <!-- <a class="menuItem" routerLink="/episode/create" routerLinkActive="active">Create</a> -->
+    </ng-container>
+    <div class="menuItem" routerLink="/about" routerLinkActive="active">About</div>
+  </div>
+
+  <div class="auth-button-container">
+    <app-auth-button></app-auth-button>
+  </div>
+</nav>

@@ -1,0 +1,17 @@
+<div class="list-container">
+  <h2>
+    Episodes
+    <button
+      class="fa fa-plus"
+      title="Add new episode"
+      routerLink="/episodes/create"
+    ></button>
+  </h2>
+  <ul *ngFor="let episode of episodeList">
+    <li>
+      <b class="episode-title">{{ episode.Title }}</b>
+      <p class="episode-description">{{ episode.Description }}</p>
+      <button class="fa fa-edit" routerLink='/episodes/{{episode._id}}/edit'></button>
+    </li>
+  </ul>
+</div>

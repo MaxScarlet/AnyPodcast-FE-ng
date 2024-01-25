@@ -1,7 +1,7 @@
 // episodes.component.ts
 
 import { Component, OnInit } from '@angular/core';
-import { EpisodeService } from '../services/episode.service';
+import { EpisodeService } from '../../services/episode.service';
 
 @Component({
   selector: 'app-episodes',
@@ -18,11 +18,8 @@ export class EpisodesComponent implements OnInit {
   }
 
   fetchEpisodes(): void {
-
     this.episodeService.get<any[]>().subscribe(
       (response) => {
-        console.log(response);
-
         this.episodeList = response;
       },
       (error) => {
