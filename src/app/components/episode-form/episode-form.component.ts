@@ -41,7 +41,6 @@ export class EpisodeFormComponent {
   }
 
   getValues() {
-    console.log(this._id);
     this.episodeService.getByID<EpisodeFormModel>(this._id).subscribe(
       (response) => {
         // this.formData = response as EpisodeFormModel;

@@ -1,0 +1,12 @@
+<!-- popup.component.html -->
+<h1 mat-dialog-title>Podcasts</h1>
+<div mat-dialog-content>
+  <ul *ngFor="let podcast of podcastList">
+    <li class="item" (click)="handleLIClick(podcast._id)" >
+      {{ podcast.Title }}
+    </li>
+  </ul>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="closeDialog()">Close</button>
+</div>
