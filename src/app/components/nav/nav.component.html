@@ -8,11 +8,17 @@
       title="anyPodcast"
     />
     <ng-container *ngIf="auth.isAuthenticated$ | async">
-      <div class="menuItem" routerLink="/dashboard" routerLinkActive="active">Dashboard</div>
-      <div class="menuItem" routerLink="/episodes" routerLinkActive="active">Episodes</div>
-      <!-- <a class="menuItem" routerLink="/episode/create" routerLinkActive="active">Create</a> -->
+      <div class="menuItem" routerLink="/dashboard" routerLinkActive="active">
+        Dashboard
+      </div>
+      <div class="menuItem" routerLink="/episodes" routerLinkActive="active">
+        Episodes
+      </div>
+      <button mat-button (click)="openDialog()">Podcasts</button>
     </ng-container>
-    <div class="menuItem" routerLink="/about" routerLinkActive="active">About</div>
+    <div class="menuItem" routerLink="/about" routerLinkActive="active">
+      About
+    </div>
   </div>
 
   <div class="auth-button-container">

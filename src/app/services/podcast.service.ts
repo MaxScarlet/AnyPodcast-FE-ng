@@ -8,17 +8,16 @@ import { environment } from '../../environment';
 @Injectable({
   providedIn: 'root',
 })
-export class EpisodeService {
-  private mainUrl: string = `${environment.episodeUrl}/episode`;
+export class PodcastService {
+  private mainUrl: string = `${environment.podcastUrl}/podcast`;
 
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',
   });
-
   constructor(private http: HttpClient) {}
 
-  get<T>(podcastID: string): Observable<T[]> {
-    const fullUrl: string = `${this.mainUrl}?PodcastID=${podcastID}`;
+  get<T>(parentId : string): Observable<T[]> {
+    const fullUrl: string = `${this.mainUrl}?UserID=${parentId}`;
     const response = this.http.get(fullUrl, {
       headers: this.headers,
     }) as Observable<T[]>;

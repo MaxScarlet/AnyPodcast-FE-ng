@@ -1,6 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { DOCUMENT } from '@angular/common';
+import { GlobalService } from 'src/app/services/global.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-auth-button',
@@ -12,12 +14,20 @@ export class AuthButtonComponent {
 
   ngOnInit(): void {
     this.auth.user$.subscribe((userSub) => {
-      this.user = userSub;
+      if (userSub && userSub.sub) {
+        this.user = userSub;
+        this.globalService.UserID = this.user.sub.split('|')[1];
+      }
     });
   }
-
+  authLogout(): void {
+    this.cookieService.delete('podcastID');
+    this.auth.logout();
+  }
   constructor(
     @Inject(DOCUMENT) public document: Document,
-    public auth: AuthService
+    public auth: AuthService,
+    private globalService: GlobalService,
+    private cookieService: CookieService
   ) {}
 }
