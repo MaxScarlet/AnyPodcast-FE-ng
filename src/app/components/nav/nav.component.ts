@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '@auth0/auth0-angular';
 import { PopupComponent } from '../popup/popup.component';
+import { TokenService } from 'src/app/services/token.service';
 
 @Component({
   selector: 'app-nav',
@@ -12,7 +13,20 @@ export class NavComponent {
   constructor(
     public auth: AuthService,
     public dialog: MatDialog,
+    private tokenService: TokenService
   ) {}
+  public user: any;
+  public isAuthenticated: boolean = false;
+
+  ngOnInit(): void {
+    this.auth.user$.subscribe((userSub) => {
+      if (userSub && userSub.sub) {
+        this.user = userSub;
+        this.isAuthenticated = true;
+        this.tokenService.getExpiration();
+      }
+    });
+  }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(PopupComponent, {
@@ -20,7 +34,6 @@ export class NavComponent {
       panelClass: 'custom-dialog-container',
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-    });
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 }

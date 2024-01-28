@@ -22,6 +22,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { CookieService } from 'ngx-cookie-service';
 import { PodcastService } from './services/podcast.service';
 import { GlobalService } from './services/global.service';
+import { FooterComponent } from './components/footer/footer.component';
+import { PopupMsgComponent } from './components/popup-msg/popup-msg.component';
+import { PopupService } from './services/popup.service';
 
 @NgModule({
   declarations: [
@@ -35,6 +38,8 @@ import { GlobalService } from './services/global.service';
     AboutComponent,
     EpisodeFormComponent,
     PopupComponent,
+    FooterComponent,
+    PopupMsgComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,7 +56,13 @@ import { GlobalService } from './services/global.service';
     BrowserAnimationsModule,
     MatDialogModule,
   ],
-  providers: [EpisodeService, CookieService, PodcastService, GlobalService],
+  providers: [
+    EpisodeService,
+    CookieService,
+    PodcastService,
+    GlobalService,
+    PopupService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -20,14 +20,16 @@ export class AuthButtonComponent {
       }
     });
   }
+
   authLogout(): void {
     this.cookieService.delete('podcastID');
     this.auth.logout();
   }
+
   constructor(
     @Inject(DOCUMENT) public document: Document,
     public auth: AuthService,
-    private globalService: GlobalService,
+    public globalService: GlobalService,
     private cookieService: CookieService
   ) {}
 }

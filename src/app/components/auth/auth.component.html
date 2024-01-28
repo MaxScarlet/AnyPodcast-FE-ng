@@ -1,10 +1,8 @@
 <ng-container *ngIf="auth.isAuthenticated$ | async; else loggedOut">
-  <span>
-    Hello, <a routerLink="/profile"> {{ user.nickname }}</a>
-  </span>
+
   <img
     class="img_btn"
-    (click)="authLogout()"
+    (click)="this.globalService.logout()"
     src="assets/images/logout_icon_32_light.png"
     alt="logout"
   />
