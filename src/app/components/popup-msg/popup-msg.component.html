@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+<mat-dialog-content>
+  <p>{{ data.message }}</p>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <ng-container *ngIf="data.showConfirmButton">
+    <button mat-button [mat-dialog-close]="true">
+      {{ data.confirmButtonText }}
+    </button>
+  </ng-container>
+  <ng-container *ngIf="data.showCancelButton">
+    <button mat-button [mat-dialog-close]="false">
+      {{ data.cancelButtonText }}
+    </button>
+  </ng-container>
+</mat-dialog-actions>

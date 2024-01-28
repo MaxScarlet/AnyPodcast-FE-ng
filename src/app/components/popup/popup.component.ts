@@ -16,8 +16,8 @@ export class PopupComponent {
   private userID: string = this.globalService.UserID;
 
   constructor(
-    public dialogRef: MatDialogRef<PopupComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<PopupComponent>,
     private podcastService: PodcastService,
     private globalService: GlobalService,
     private router: Router,

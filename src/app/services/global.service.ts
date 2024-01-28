@@ -18,7 +18,12 @@ export class GlobalService {
     this.getUserID();
   }
 
-  getUserID(): void {
+  public logout() {
+    this.auth.logout();
+    this.cookieService.delete('podcastID');
+  }
+
+  private getUserID(): void {
     this.auth.user$.subscribe((userSub) => {
       if (userSub && userSub.sub) {
         this.UserID = userSub.sub.split('|')[1];
@@ -29,7 +34,7 @@ export class GlobalService {
     });
   }
 
-  getPodcastID(): void {
+  private getPodcastID(): void {
     const cookie = this.cookieService.get('podcastID');
     if (cookie) {
       this.PodcastID = cookie;

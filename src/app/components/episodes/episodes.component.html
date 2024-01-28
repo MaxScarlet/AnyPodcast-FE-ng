@@ -7,11 +7,22 @@
       routerLink="/episodes/create"
     ></button>
   </h2>
-  <ul *ngFor="let episode of episodeList">
-    <li>
-      <b class="episode-title">{{ episode.Title }}</b>
-      <p class="episode-description">{{ episode.Description }}</p>
-      <button class="fa fa-edit" routerLink='/episodes/{{episode._id}}/edit'></button>
-    </li>
-  </ul>
+
+  <div class="episode-list">
+    <ul *ngFor="let episode of episodeList">
+      <li>
+        <p class="episode-created">{{ episode.Created }}</p>
+        <b class="episode-title">{{ episode.Title }}</b>
+        <p class="episode-description">{{ episode.Description }}</p>
+        <button
+          class="fa fa-edit"
+          routerLink="/episodes/{{ episode._id }}/edit"
+        ></button>
+        <button
+          class="fa fa-remove"
+          (click)="openPrompt(episode)"
+        ></button>
+      </li>
+    </ul>
+  </div>
 </div>
