@@ -7,6 +7,7 @@ import { UserProfileComponent } from './components/profile/profile.component';
 import { AuthGuard } from '@auth0/auth0-angular';
 import { AboutComponent } from './components/about/about.component';
 import { EpisodeFormComponent } from './components/episode-form/episode-form.component';
+import { PodcastInfoComponent } from './components/podcast-info/podcast-info.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -16,20 +17,34 @@ const routes: Routes = [
     component: DashboardComponent,
     canActivate: [AuthGuard],
   },
-  { path: 'episodes', component: EpisodesComponent, canActivate: [AuthGuard] },
+  {
+    path: 'podcast/:podcastID/episode',
+    component: EpisodesComponent,
+    canActivate: [AuthGuard],
+  },
   {
     path: 'profile',
     component: UserProfileComponent,
     canActivate: [AuthGuard],
   },
   {
-    path: 'episodes/create',
+    path: 'podcast/:podcastID/episode/create',
     component: EpisodeFormComponent,
     canActivate: [AuthGuard],
   },
   {
-    path: 'episodes/:_id/edit',
+    path: 'podcast/:podcastID/episode/:episodeID',
     component: EpisodeFormComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'podcast/create',
+    component: PodcastInfoComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'podcast/:podcastID',
+    component: PodcastInfoComponent,
     canActivate: [AuthGuard],
   },
   { path: '**', redirectTo: '/home' },

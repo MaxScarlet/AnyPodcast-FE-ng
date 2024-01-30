@@ -17,14 +17,10 @@ export class TokenService {
 
   getExpiration() {
     return this.auth.idTokenClaims$.subscribe((token) => {
-      console.log(token);
       const expirationTime = token?.exp! * 1000;
       const currentTime = Date.now();
 
       let countdown = expirationTime! - currentTime;
-      console.log(expirationTime);
-      console.log(currentTime);
-      console.log(countdown);
 
       let counter = this.countdownThreshold;
       setTimeout(() => {

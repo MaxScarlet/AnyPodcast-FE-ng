@@ -25,6 +25,7 @@ import { GlobalService } from './services/global.service';
 import { FooterComponent } from './components/footer/footer.component';
 import { PopupMsgComponent } from './components/popup-msg/popup-msg.component';
 import { PopupService } from './services/popup.service';
+import { PodcastInfoComponent } from './components/podcast-info/podcast-info.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { PopupService } from './services/popup.service';
     PopupComponent,
     FooterComponent,
     PopupMsgComponent,
+    PodcastInfoComponent,
   ],
   imports: [
     BrowserModule,

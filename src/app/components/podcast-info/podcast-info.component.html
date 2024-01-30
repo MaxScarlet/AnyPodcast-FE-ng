@@ -1,0 +1,21 @@
+<form>
+  <label for="name">Title: </label>
+  <input
+    type="text"
+    id="Title"
+    name="Title"
+    [(ngModel)]="formData.Title"
+    required
+  />
+  <br />
+  <label for="email">Description: </label>
+  <input
+    type="text"
+    id="Description"
+    name="Description"
+    [(ngModel)]="formData.Description"
+    required
+  />
+  <br />
+  <button type="button" (click)="onSubmit()">Save</button>
+</form>

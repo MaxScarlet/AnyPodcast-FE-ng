@@ -3,7 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, from } from 'rxjs';
 import { EpisodeService } from 'src/app/services/episode.service';
 import { GlobalService } from 'src/app/services/global.service';
+import { PodcastService } from 'src/app/services/podcast.service';
 import { PopupService } from 'src/app/services/popup.service';
+import { Location } from '@angular/common';
 
 type EpisodeApiResponse = {
   _id: string;
@@ -43,12 +45,12 @@ export class EpisodeFormComponent {
     this.route.params.subscribe((params) => {
       this._id = params['_id'];
       if (this._id) {
-        this.getValues();
+        this.getEpisodes();
       }
     });
   }
 
-  getValues() {
+  getEpisodes() {
     this.episodeService.getByID<EpisodeFormModel>(this._id).subscribe(
       (response) => {
         this.formData.Title = response.Title;
@@ -64,12 +66,10 @@ export class EpisodeFormComponent {
     let observable: Observable<EpisodeFormModel>;
     if (!this._id) {
       this.formData.PodcastID = this.globalService.PodcastID;
-      observable = this.episodeService.postEpisode<EpisodeFormModel>(
-        this.formData
-      );
+      observable = this.episodeService.create<EpisodeFormModel>(this.formData);
     } else {
       const { PodcastID, ...formDataWithoutPodcastID } = this.formData;
-      observable = this.episodeService.updateEpisode<EpisodeFormModel>(
+      observable = this.episodeService.update<EpisodeFormModel>(
         formDataWithoutPodcastID,
         this._id
       );
@@ -83,6 +83,7 @@ export class EpisodeFormComponent {
       }
     );
   }
+
   openMessage() {
     this.popupService
       .openPopup({
@@ -92,7 +93,9 @@ export class EpisodeFormComponent {
       })
       .subscribe((result) => {
         if (result) {
-          this.router.navigate(['episodes']);
+          this.router.navigate([
+            `/podcast/${this.globalService.PodcastID}/episode`,
+          ]);
         }
       });
   }
