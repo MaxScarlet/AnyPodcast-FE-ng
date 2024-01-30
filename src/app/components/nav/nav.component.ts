@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '@auth0/auth0-angular';
 import { PopupComponent } from '../popup/popup.component';
 import { TokenService } from 'src/app/services/token.service';
+import { GlobalService } from 'src/app/services/global.service';
 
 @Component({
   selector: 'app-nav',
@@ -13,7 +14,8 @@ export class NavComponent {
   constructor(
     public auth: AuthService,
     public dialog: MatDialog,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    public globalService: GlobalService
   ) {}
   public user: any;
   public isAuthenticated: boolean = false;

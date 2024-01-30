@@ -27,7 +27,6 @@ export class PopupComponent {
   ngOnInit(): void {
     this.podcastService.get<any>(this.userID).subscribe(
       (response) => {
-        GlobalService;
         this.podcastList = response;
       },
       (error) => {
@@ -42,7 +41,7 @@ export class PopupComponent {
   handleLIClick(_id: string): void {
     this.globalService.PodcastID = _id;
     this.cookieService.set('podcastID', this.globalService.PodcastID);
-    this.router.navigate(['/episodes']);
+    this.router.navigate([`/podcast/${this.globalService.PodcastID}/episode`]);
     this.closeDialog();
   }
 }

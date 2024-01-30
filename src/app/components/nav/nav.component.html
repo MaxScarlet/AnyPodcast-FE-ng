@@ -11,13 +11,28 @@
       <div class="menuItem" routerLink="/dashboard" routerLinkActive="active">
         Dashboard
       </div>
-      <div class="menuItem" routerLink="/episodes" routerLinkActive="active">
+      <div
+        class="menuItem"
+        *ngIf="this.globalService.PodcastID"
+        title="{{ this.globalService.PodcastID }}"
+        routerLink="/podcast/{{ this.globalService.PodcastID }}"
+        [routerLinkActiveOptions]="{ exact: true }"
+        routerLinkActive="active"
+      >
+        Podcast Info
+      </div>
+      <div
+        class="menuItem"
+        routerLink="/podcast/{{ this.globalService.PodcastID }}/episode"
+        routerLinkActive="active"
+      >
         Episodes
       </div>
     </ng-container>
     <div class="menuItem" routerLink="/about" routerLinkActive="active">
       About
     </div>
+    <div class="menuItem">{{ this.globalService.PodcastID }}</div>
   </div>
 
   <div class="auth-button-container">

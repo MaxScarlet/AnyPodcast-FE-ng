@@ -41,11 +41,15 @@ export class GlobalService {
     } else if (this.UserID) {
       this.podcastService.get<any>(this.UserID).subscribe(
         (response) => {
-          this.PodcastID = response[0]._id;
-          this.cookieService.set('podcastID', this.PodcastID);
+          if (response && response[0]) {
+            this.PodcastID = response[0]._id;
+            this.cookieService.set('podcastID', this.PodcastID);
+          } else {
+            console.warn('Podcasts not found');
+          }
         },
         (error) => {
-          console.error('Error fetching episodes:', error);
+          console.error('Error fetching podcasts:', error);
         }
       );
     }

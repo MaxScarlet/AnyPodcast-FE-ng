@@ -6,6 +6,12 @@ import { GlobalService } from 'src/app/services/global.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PopupComponent } from '../popup/popup.component';
 import { PopupService } from 'src/app/services/popup.service';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  NavigationStart,
+  Router,
+} from '@angular/router';
 
 @Component({
   selector: 'app-episodes',
@@ -20,12 +26,24 @@ export class EpisodesComponent implements OnInit {
     private episodeService: EpisodeService,
     private globalService: GlobalService,
     public dialog: MatDialog,
-    private popupService: PopupService
-  ) {}
+    private popupService: PopupService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        if (router.url.endsWith('/episode')) {
+          console.log(router.url);
+          this.podcastID = this.globalService.PodcastID;
+          this.fetchEpisodes();
+        }
+      }
+    });
+  }
 
   ngOnInit(): void {
-    this.podcastID = this.globalService.PodcastID;
-    this.fetchEpisodes();
+    // this.podcastID = this.globalService.PodcastID;
+    // this.fetchEpisodes();
   }
 
   fetchEpisodes(): void {
@@ -54,8 +72,8 @@ export class EpisodesComponent implements OnInit {
       .openPopup({
         title: 'Delete Episode',
         message: `Are you sure you want to delete "${episode.Title}"`,
-        confirmButtonText: "Confirm",
-        cancelButtonText: "Cancel",
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel',
       })
       .subscribe((result) => {
         if (result) {
@@ -65,7 +83,7 @@ export class EpisodesComponent implements OnInit {
   }
 
   deleteEpisode(id: string): void {
-    this.episodeService.deleteEpisode(id).subscribe(
+    this.episodeService.delete(id).subscribe(
       (response) => {
         this.fetchEpisodes();
       },

@@ -33,7 +33,7 @@ export class EpisodeService {
     return response;
   }
 
-  postEpisode<T>(episode: any): Observable<T> {
+  create<T>(episode: any): Observable<T> {
     const fullUrl: string = `${this.mainUrl}`;
     const response = this.http.post(fullUrl, episode, {
       headers: this.headers,
@@ -41,14 +41,14 @@ export class EpisodeService {
     return response;
   }
 
-  updateEpisode<T>(episode: any, id: string): Observable<T> {
+  update<T>(episode: any, id: string): Observable<T> {
     const fullUrl: string = `${this.mainUrl}/${id}`;
     const response = this.http.put(fullUrl, episode, {
       headers: this.headers,
     }) as Observable<T>;
     return response;
   }
-  deleteEpisode<T>(id: string): Observable<T> {
+  delete<T>(id: string): Observable<T> {
     const fullUrl: string = `${this.mainUrl}/${id}`;
     const response = this.http.delete(fullUrl, {
       headers: this.headers,

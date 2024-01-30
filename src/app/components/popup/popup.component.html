@@ -1,9 +1,18 @@
 <!-- popup.component.html -->
-<h1 mat-dialog-title>Podcasts</h1>
+<h1 mat-dialog-title>
+  Podcasts
+  <button
+    class="fa fa-plus"
+    routerLink="/podcast/create"
+    title="Create"
+    (click)="closeDialog()"
+  ></button>
+</h1>
+
 <div mat-dialog-content>
   <ul *ngFor="let podcast of podcastList">
-    <li class="item" (click)="handleLIClick(podcast._id)" >
-      {{ podcast.Title }}
+    <li class="item">
+      <span (click)="handleLIClick(podcast._id)">{{ podcast.Title }}</span>
     </li>
   </ul>
 </div>
