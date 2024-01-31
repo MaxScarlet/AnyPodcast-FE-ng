@@ -28,7 +28,8 @@ export class PopupService {
       settings.showCancelButton = true;
     }
     this.dialogRef = this.dialog.open(PopupMsgComponent, {
-      width: '400px', // Adjust the width as needed
+      width: '400px',
+      panelClass: 'custom-dialog-container',
       data: settings,
     });
 

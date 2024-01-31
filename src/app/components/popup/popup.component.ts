@@ -19,7 +19,7 @@ export class PopupComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<PopupComponent>,
     private podcastService: PodcastService,
-    private globalService: GlobalService,
+    public globalService: GlobalService,
     private router: Router,
     private cookieService: CookieService
   ) {}
@@ -40,7 +40,10 @@ export class PopupComponent {
 
   handleLIClick(_id: string): void {
     this.globalService.PodcastID = _id;
-    this.cookieService.set('podcastID', this.globalService.PodcastID);
+    this.cookieService.set('podcastID', this.globalService.PodcastID, {
+      path: '/',
+    });
+    this.globalService.updateAppVar(this.globalService.PodcastID);
     this.router.navigate([`/podcast/${this.globalService.PodcastID}/episode`]);
     this.closeDialog();
   }

@@ -1,21 +1,25 @@
 <!-- popup.component.html -->
-<h1 mat-dialog-title>
-  Podcasts
-  <button
-    class="fa fa-plus"
-    routerLink="/podcast/create"
-    title="Create"
-    (click)="closeDialog()"
-  ></button>
-</h1>
 
 <div mat-dialog-content>
+  <div class="headerCont">
+    <h1 mat-dialog-title>Podcasts</h1>
+    <button
+      class="fa fa-plus createBtn"
+      routerLink="/podcast/create"
+      title="Create"
+      (click)="closeDialog()"
+    ></button>
+  </div>
   <ul *ngFor="let podcast of podcastList">
-    <li class="item">
+    <li
+      class="item"
+      [ngClass]="{ selected: podcast._id === this.globalService.PodcastID }"
+    >
       <span (click)="handleLIClick(podcast._id)">{{ podcast.Title }}</span>
     </li>
   </ul>
-</div>
-<div mat-dialog-actions>
-  <button mat-button (click)="closeDialog()">Close</button>
+
+  <div mat-dialog-actions class="closeBtn">
+    <button mat-button (click)="closeDialog()">Close</button>
+  </div>
 </div>

@@ -1,6 +1,6 @@
 // episodes.component.ts
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EpisodeService } from '../../services/episode.service';
 import { GlobalService } from 'src/app/services/global.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,38 +12,45 @@ import {
   NavigationStart,
   Router,
 } from '@angular/router';
+import { Subscription, firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-episodes',
   templateUrl: './episodes.component.html',
   styleUrls: ['./episodes.component.css'],
 })
-export class EpisodesComponent implements OnInit {
-  episodeList: any[] = [];
+export class EpisodesComponent implements OnDestroy {
+  public episodeList: any[] = [];
   private podcastID: string = '';
+  private subscription: Subscription;
 
   constructor(
     private episodeService: EpisodeService,
-    private globalService: GlobalService,
+    public globalService: GlobalService,
     public dialog: MatDialog,
     private popupService: PopupService,
     private router: Router,
     private route: ActivatedRoute
   ) {
-    router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        if (router.url.endsWith('/episode')) {
-          console.log(router.url);
-          this.podcastID = this.globalService.PodcastID;
-          this.fetchEpisodes();
-        }
-      }
+    console.log('constructing');
+    this.subscription = this.globalService.appVar$.subscribe((value) => {
+      console.log('appVar$.subscribe');
+      this.ngOnInit();
     });
   }
 
-  ngOnInit(): void {
-    // this.podcastID = this.globalService.PodcastID;
-    // this.fetchEpisodes();
+  async ngOnInit() {
+    try {
+      this.podcastID = this.globalService.PodcastID;
+      this.fetchEpisodes();
+    } catch (err) {
+      console.error();
+    }
+  }
+
+  ngOnDestroy() {
+    console.log('ngOnDestroy');
+    this.subscription.unsubscribe();
   }
 
   fetchEpisodes(): void {
