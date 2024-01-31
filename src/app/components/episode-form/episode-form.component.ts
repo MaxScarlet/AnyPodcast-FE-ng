@@ -42,15 +42,19 @@ export class EpisodeFormComponent {
   };
 
   ngOnInit(): void {
+    console.log('onInit episode form');
+
     this.route.params.subscribe((params) => {
-      this._id = params['_id'];
+      console.log(params);
+      this._id = params['episodeID'];
+      console.log('episode form _id', this._id);
       if (this._id) {
-        this.getEpisodes();
+        this.getEpisode();
       }
     });
   }
 
-  getEpisodes() {
+  getEpisode() {
     this.episodeService.getByID<EpisodeFormModel>(this._id).subscribe(
       (response) => {
         this.formData.Title = response.Title;

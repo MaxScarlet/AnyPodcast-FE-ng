@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AuthModule } from '@auth0/auth0-angular';
 import { AppRoutingModule } from './app-routing.module';
@@ -27,6 +27,11 @@ import { PopupMsgComponent } from './components/popup-msg/popup-msg.component';
 import { PopupService } from './services/popup.service';
 import { PodcastInfoComponent } from './components/podcast-info/podcast-info.component';
 
+export function initializeGlobalService(
+  globalService: GlobalService
+): () => Promise<any> {
+  return () => globalService.init();
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -62,6 +67,12 @@ import { PodcastInfoComponent } from './components/podcast-info/podcast-info.com
     EpisodeService,
     CookieService,
     PodcastService,
+    {
+        provide: APP_INITIALIZER,
+        useFactory: initializeGlobalService,
+        deps: [GlobalService],
+        multi: true
+    },
     GlobalService,
     PopupService,
   ],

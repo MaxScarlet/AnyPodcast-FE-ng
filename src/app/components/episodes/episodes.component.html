@@ -4,7 +4,7 @@
     <button
       class="fa fa-plus"
       title="Add new episode"
-      routerLink="/episodes/create"
+      routerLink="/podcast/{{this.globalService.PodcastID}}/episode/create"
     ></button>
   </h2>
 
@@ -16,7 +16,7 @@
         <p class="episode-description">{{ episode.Description }}</p>
         <button
           class="fa fa-edit"
-          routerLink="/episodes/{{ episode._id }}/edit"
+          routerLink="/podcast/{{this.globalService.PodcastID}}/episode/{{ episode._id }}"
         ></button>
 
         <button class="fa fa-remove" (click)="openPrompt(episode)"></button>
