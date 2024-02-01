@@ -26,6 +26,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { PopupMsgComponent } from './components/popup-msg/popup-msg.component';
 import { PopupService } from './services/popup.service';
 import { PodcastInfoComponent } from './components/podcast-info/podcast-info.component';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 
 export function initializeGlobalService(
   globalService: GlobalService
@@ -47,7 +48,9 @@ export function initializeGlobalService(
     FooterComponent,
     PopupMsgComponent,
     PodcastInfoComponent,
+    FileUploadComponent,
   ],
+
   imports: [
     BrowserModule,
     AppRoutingModule,
