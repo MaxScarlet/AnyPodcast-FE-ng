@@ -61,14 +61,16 @@ export class FileUploadComponent {
       }
     );
   }
+
   uploadParts(uploadId: string): void {
     if (!this.selectedFile) {
       console.error('No file selected');
       return;
     }
 
-    const partSize = 0.5 * 1024 * 1024; // 5 MB part size (adjust as needed)
+    const partSize = 5 * 1024 * 1024; // 5 MB part size (adjust as needed)
     const totalParts = Math.ceil(this.selectedFile.size / partSize);
+
     let uploadedParts = 0;
 
     for (let partNumber = 1; partNumber <= totalParts; partNumber++) {
@@ -78,6 +80,9 @@ export class FileUploadComponent {
       const filePart = this.selectedFile.slice(start, end);
       const formData = new FormData();
       formData.append('file', filePart);
+      console.log('filePart:', filePart);
+
+      localStorage.setItem('formData', JSON.stringify({ data: filePart }));
 
       const headers = new HttpHeaders();
       headers.set('Content-Type', 'multipart/form-data');
@@ -103,7 +108,7 @@ export class FileUploadComponent {
             );
           } else if (event.type === HttpEventType.Response) {
             uploadedParts++;
-            
+
             if (uploadedParts === totalParts) {
               this.uploadComplete(uploadId);
             }
