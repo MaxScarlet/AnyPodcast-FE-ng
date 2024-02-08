@@ -42,7 +42,7 @@ li button:disabled {
 
 .episode-list {
   height: calc(100vh * 0.75);
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .episode-created {
