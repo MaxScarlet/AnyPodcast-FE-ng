@@ -4,20 +4,31 @@
     <button
       class="fa fa-plus"
       title="Add new episode"
-      routerLink="/podcast/{{this.globalService.PodcastID}}/episode/create"
+      routerLink="/podcast/{{ this.globalService.PodcastID }}/episode/create"
     ></button>
   </h2>
 
   <div class="episode-list">
     <ul *ngFor="let episode of episodeList">
       <li>
-        <p class="episode-created">{{ episode.Created }}</p>
+        <div class="visibleWrapper">
+          <div
+            class="episode-visble fa"
+            [ngClass]="{
+            'fa-eye': episode.IsVisible,
+            'fa-eye-slash': !episode.IsVisible,
+          }"
+          ></div>
+        </div>
         <b class="episode-title">{{ episode.Title }}</b>
         <p class="episode-description">{{ episode.Description }}</p>
         <button
           class="fa fa-edit"
-          routerLink="/podcast/{{this.globalService.PodcastID}}/episode/{{ episode._id }}"
+          routerLink="/podcast/{{ this.globalService.PodcastID }}/episode/{{
+            episode._id
+          }}"
         ></button>
+        <p class="episode-created">{{ episode.Created }}</p>
 
         <button class="fa fa-remove" (click)="openPrompt(episode)"></button>
       </li>

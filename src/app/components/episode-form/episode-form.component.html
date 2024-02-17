@@ -2,7 +2,7 @@
   <div>
     <app-file-upload [user]="userObj"></app-file-upload>
   </div>
-  <label for="name">Title: </label>
+  <label for="Title">Title: </label>
   <input
     type="text"
     id="Title"
@@ -11,7 +11,7 @@
     required
   />
   <br />
-  <label for="email">Description: </label>
+  <label for="Description">Description: </label>
   <input
     type="text"
     id="Description"
@@ -19,6 +19,26 @@
     [(ngModel)]="formData.Description"
     required
   />
+  <br />
+  <!-- <div (click)="visibleToggle()" class="visibleDiv">
+    {{ toggleText }}
+    <div
+      id="eyeDiv"
+      class="fa"
+      [ngClass]="{
+        'fa-eye-slash': formData.IsVisible,
+        'fa-eye': !formData.IsVisible,
+        'fa-clock': formData.Scheduled
+      }"
+    ></div>
+  </div>
+  <br /> -->
+  <label for="Publish">Publish: </label>
+  <app-toggle-slider
+    [isChecked]="formData.IsVisible"
+    (toggle)="visibleToggle($event)"
+  ></app-toggle-slider>
+  <br />
   <br />
   <button type="button" (click)="onSubmit()">Submit</button>
 </form>

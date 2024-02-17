@@ -15,6 +15,7 @@ type EpisodeApiResponse = {
   PodcastID?: string;
   Title: string;
   Description: string;
+  Scheduled: string;
 };
 
 type EpisodeFormModel = Omit<EpisodeApiResponse, 'Created' | '_id'>;
@@ -27,6 +28,8 @@ type EpisodeFormModel = Omit<EpisodeApiResponse, 'Created' | '_id'>;
 export class EpisodeFormComponent {
   private _id: string = '';
   userObj: User = new User();
+
+  toggleText: string = 'Unpublished';
 
   constructor(
     private route: ActivatedRoute,
@@ -41,6 +44,7 @@ export class EpisodeFormComponent {
     IsVisible: false,
     Title: '',
     Description: '',
+    Scheduled: '',
   };
 
   ngOnInit(): void {
@@ -61,11 +65,17 @@ export class EpisodeFormComponent {
     });
   }
 
+  visibleToggle(isChecked: boolean): void {
+    this.formData.IsVisible = isChecked;
+    console.log(isChecked);
+  }
+
   getEpisode() {
     this.episodeService.getByID<EpisodeFormModel>(this._id).subscribe(
       (response) => {
         this.formData.Title = response.Title;
         this.formData.Description = response.Description;
+        this.formData.IsVisible = response.IsVisible;
       },
       (error) => {
         console.error('Error fetching episodes:', error);
@@ -80,6 +90,8 @@ export class EpisodeFormComponent {
       observable = this.episodeService.create<EpisodeFormModel>(this.formData);
     } else {
       const { PodcastID, ...formDataWithoutPodcastID } = this.formData;
+      console.log(this.formData);
+
       observable = this.episodeService.update<EpisodeFormModel>(
         formDataWithoutPodcastID,
         this._id
