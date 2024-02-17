@@ -32,7 +32,7 @@ export class EpisodesComponent implements OnDestroy {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    console.log('constructing');
+    console.log('Episodes Constructor');
     this.subscription = this.globalService.appVar$.subscribe((value) => {
       console.log('appVar$.subscribe');
       this.ngOnInit();

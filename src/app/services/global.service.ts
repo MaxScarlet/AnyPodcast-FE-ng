@@ -65,7 +65,7 @@ export class GlobalService {
   }
 
   private async getPodcastID() {
-    const cookie = await this.cookieService.get('podcastID');
+    const cookie = this.cookieService.get('podcastID');
     console.log('Cookie ', cookie);
     if (cookie) {
       this.PodcastID = cookie;

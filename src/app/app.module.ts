@@ -27,6 +27,7 @@ import { PopupMsgComponent } from './components/popup-msg/popup-msg.component';
 import { PopupService } from './services/popup.service';
 import { PodcastInfoComponent } from './components/podcast-info/podcast-info.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
+import { environment } from 'src/environment';
 
 export function initializeGlobalService(
   globalService: GlobalService
@@ -57,8 +58,8 @@ export function initializeGlobalService(
     HttpClientModule,
     FormsModule,
     AuthModule.forRoot({
-      domain: 'oxymoron-tech.eu.auth0.com',
-      clientId: '3UiN4cnPFhPZ2T29eF6rCjLi3stoJX9e',
+      domain: environment.auth0.domain,
+      clientId: environment.auth0.id,
       authorizationParams: {
         redirect_uri: window.location.origin,
       },

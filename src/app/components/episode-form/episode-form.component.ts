@@ -6,6 +6,7 @@ import { GlobalService } from 'src/app/services/global.service';
 import { PodcastService } from 'src/app/services/podcast.service';
 import { PopupService } from 'src/app/services/popup.service';
 import { Location } from '@angular/common';
+import { User } from 'src/app/models/User';
 
 type EpisodeApiResponse = {
   _id: string;
@@ -24,6 +25,9 @@ type EpisodeFormModel = Omit<EpisodeApiResponse, 'Created' | '_id'>;
   styleUrls: ['./episode-form.component.css'],
 })
 export class EpisodeFormComponent {
+  private _id: string = '';
+  userObj: User = new User();
+
   constructor(
     private route: ActivatedRoute,
     private episodeService: EpisodeService,
@@ -31,8 +35,6 @@ export class EpisodeFormComponent {
     private router: Router,
     private popupService: PopupService
   ) {}
-
-  private _id: string = '';
 
   public formData: EpisodeFormModel = {
     PodcastID: '',
@@ -48,6 +50,11 @@ export class EpisodeFormComponent {
       console.log(params);
       this._id = params['episodeID'];
       console.log('episode form _id', this._id);
+
+      this.userObj.UserId = this.globalService.UserID;
+      this.userObj.PodcastId = this.globalService.PodcastID;
+      this.userObj.EpisodeId = this._id;
+
       if (this._id) {
         this.getEpisode();
       }
