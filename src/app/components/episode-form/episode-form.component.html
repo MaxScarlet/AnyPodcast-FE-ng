@@ -1,6 +1,11 @@
 <form>
   <div>
-    <app-file-upload [user]="userObj"></app-file-upload>
+    
+    <app-file-upload
+      [user]="userObj"
+      (uploadFileName)="uploadComplete($event)"
+      (uploadStarted)="uploadInProgress()"
+    ></app-file-upload>
   </div>
   <label for="Title">Title: </label>
   <input
@@ -40,5 +45,5 @@
   ></app-toggle-slider>
   <br />
   <br />
-  <button type="button" (click)="onSubmit()">Submit</button>
+  <button type="button" (click)="onSubmit()" [disabled]="upload">Submit</button>
 </form>

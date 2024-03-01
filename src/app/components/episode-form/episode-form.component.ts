@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, from } from 'rxjs';
 import { EpisodeService } from 'src/app/services/episode.service';
@@ -16,6 +16,8 @@ type EpisodeApiResponse = {
   Title: string;
   Description: string;
   Scheduled: string;
+  UploadID: string;
+  FileName: string;
 };
 
 type EpisodeFormModel = Omit<EpisodeApiResponse, 'Created' | '_id'>;
@@ -26,9 +28,10 @@ type EpisodeFormModel = Omit<EpisodeApiResponse, 'Created' | '_id'>;
   styleUrls: ['./episode-form.component.css'],
 })
 export class EpisodeFormComponent {
+  @Input() uploadFileName!: string;
   private _id: string = '';
   userObj: User = new User();
-
+  upload: boolean = false;
   toggleText: string = 'Unpublished';
 
   constructor(
@@ -45,10 +48,13 @@ export class EpisodeFormComponent {
     Title: '',
     Description: '',
     Scheduled: '',
+    UploadID: '',
+    FileName: '',
   };
 
   ngOnInit(): void {
     console.log('onInit episode form');
+    console.log('ngOnInit', this.upload);
 
     this.route.params.subscribe((params) => {
       console.log(params);
@@ -63,6 +69,21 @@ export class EpisodeFormComponent {
         this.getEpisode();
       }
     });
+  }
+
+  uploadComplete(fileName: string): void {
+    this.formData.FileName = fileName;
+    this.upload = false;
+    console.log('uploadComplete', this.upload);
+  }
+
+  uploadInProgress() {
+    this.upload = true;
+    console.log('uploadInProgress', this.upload);
+  }
+
+  uploadCheck() {
+    return true;
   }
 
   visibleToggle(isChecked: boolean): void {
@@ -83,7 +104,10 @@ export class EpisodeFormComponent {
     );
   }
 
+  getImageRef() {}
+
   onSubmit() {
+    console.log('onSubmit');
     let observable: Observable<EpisodeFormModel>;
     if (!this._id) {
       this.formData.PodcastID = this.globalService.PodcastID;
@@ -99,6 +123,7 @@ export class EpisodeFormComponent {
     }
     observable.subscribe(
       (response) => {
+        //TODO: rename file in s3 bucket
         this.openMessage();
       },
       (error) => {

@@ -1,3 +1,7 @@
 .visibleDiv {
   cursor: pointer;
 }
+button:disabled {
+  background-color: grey;
+  cursor: none;
+}
