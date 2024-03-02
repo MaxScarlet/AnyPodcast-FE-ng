@@ -8,7 +8,11 @@
     ></button>
   </h2>
 
-  <div class="episode-list">
+  <div *ngIf="isLoading" class="loading-spinner">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+  </div>
+
+  <div class="episode-list" *ngIf="!isLoading">
     <ul *ngFor="let episode of episodeList">
       <li>
         <div class="visibleWrapper">

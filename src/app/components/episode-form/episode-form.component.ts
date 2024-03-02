@@ -8,6 +8,7 @@ import { PopupService } from 'src/app/services/popup.service';
 import { Location } from '@angular/common';
 import { User } from 'src/app/models/User';
 
+//TODO: Rewrite as a model
 type EpisodeApiResponse = {
   _id: string;
   Created: string;
@@ -17,7 +18,9 @@ type EpisodeApiResponse = {
   Description: string;
   Scheduled: string;
   UploadID: string;
-  FileName: string;
+  PosterName: string;
+  MediaFile: string;
+  MediaFileOriginal: string;
 };
 
 type EpisodeFormModel = Omit<EpisodeApiResponse, 'Created' | '_id'>;
@@ -33,6 +36,7 @@ export class EpisodeFormComponent {
   userObj: User = new User();
   upload: boolean = false;
   toggleText: string = 'Unpublished';
+  public isLoading: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -49,7 +53,9 @@ export class EpisodeFormComponent {
     Description: '',
     Scheduled: '',
     UploadID: '',
-    FileName: '',
+    PosterName: '',
+    MediaFile: '',
+    MediaFileOriginal: '',
   };
 
   ngOnInit(): void {
@@ -57,33 +63,41 @@ export class EpisodeFormComponent {
     console.log('ngOnInit', this.upload);
 
     this.route.params.subscribe((params) => {
-      console.log(params);
+      console.log('params', params);
       this._id = params['episodeID'];
       console.log('episode form _id', this._id);
 
       this.userObj.UserId = this.globalService.UserID;
       this.userObj.PodcastId = this.globalService.PodcastID;
       this.userObj.EpisodeId = this._id;
+      console.log('UserOBJ', this.userObj);
 
       if (this._id) {
+        console.log('get episode');
         this.getEpisode();
+      } else {
+        console.log('create episode');
+        this.createEpisode();
       }
     });
   }
 
   uploadComplete(fileName: string): void {
-    this.formData.FileName = fileName;
+    this.formData.MediaFile = fileName;
     this.upload = false;
     console.log('uploadComplete', this.upload);
   }
 
-  uploadInProgress() {
+  uploadInProgress(fileNameOriginal: string): void {
     this.upload = true;
+    this.formData.MediaFileOriginal = fileNameOriginal;
     console.log('uploadInProgress', this.upload);
   }
 
-  uploadCheck() {
-    return true;
+  imageUploadStart() {}
+  imageUploadComplete(fileName: string): void {
+    this.formData.PosterName = fileName;
+    console.log('uploadComplete', this.upload);
   }
 
   visibleToggle(isChecked: boolean): void {
@@ -94,9 +108,8 @@ export class EpisodeFormComponent {
   getEpisode() {
     this.episodeService.getByID<EpisodeFormModel>(this._id).subscribe(
       (response) => {
-        this.formData.Title = response.Title;
-        this.formData.Description = response.Description;
-        this.formData.IsVisible = response.IsVisible;
+        this.formData = response;
+        console.log(this.formData);
       },
       (error) => {
         console.error('Error fetching episodes:', error);
@@ -104,25 +117,35 @@ export class EpisodeFormComponent {
     );
   }
 
-  getImageRef() {}
+  createEpisode() {
+    let observable: Observable<EpisodeFormModel>;
+    this.formData.PodcastID = this.globalService.PodcastID;
+    observable = this.episodeService.create<EpisodeFormModel>(this.formData);
+    observable.subscribe(
+      (response: any) => {
+        //TODO: rename file in s3 bucket
+        this.router.navigate([
+          `/podcast/${this.globalService.PodcastID}/episode/${response._id}`,
+        ]);
+      },
+      (error) => {
+        console.error('Error handling episode: ', error);
+      }
+    );
+  }
 
   onSubmit() {
     console.log('onSubmit');
     let observable: Observable<EpisodeFormModel>;
-    if (!this._id) {
-      this.formData.PodcastID = this.globalService.PodcastID;
-      observable = this.episodeService.create<EpisodeFormModel>(this.formData);
-    } else {
-      const { PodcastID, ...formDataWithoutPodcastID } = this.formData;
-      console.log(this.formData);
 
-      observable = this.episodeService.update<EpisodeFormModel>(
-        formDataWithoutPodcastID,
-        this._id
-      );
-    }
+    const { PodcastID, ...formDataWithoutPodcastID } = this.formData;
+    console.log('onSubmit formData', this.formData);
+    observable = this.episodeService.update<EpisodeFormModel>(
+      formDataWithoutPodcastID,
+      this._id
+    );
     observable.subscribe(
-      (response) => {
+      (response: any) => {
         //TODO: rename file in s3 bucket
         this.openMessage();
       },

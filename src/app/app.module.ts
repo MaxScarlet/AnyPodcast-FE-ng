@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from 'src/environment';
@@ -29,6 +30,7 @@ import { GlobalService } from './services/global.service';
 import { PodcastService } from './services/podcast.service';
 import { PopupService } from './services/popup.service';
 import { ToggleSliderComponent } from './components/toggle-slider/toggle-slider.component';
+import { ImageUploadComponent } from './components/image-upload/image-upload.component';
 
 export function initializeGlobalService(
   globalService: GlobalService
@@ -52,6 +54,7 @@ export function initializeGlobalService(
     PodcastInfoComponent,
     FileUploadComponent,
     ToggleSliderComponent,
+    ImageUploadComponent,
   ],
 
   imports: [
@@ -69,6 +72,7 @@ export function initializeGlobalService(
     BrowserAnimationsModule,
     MatDialogModule,
     MatSliderModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     EpisodeService,

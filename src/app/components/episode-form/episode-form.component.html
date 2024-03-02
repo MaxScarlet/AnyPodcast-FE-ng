@@ -1,11 +1,37 @@
-<form>
+<form (ngSubmit)="onSubmit()">
   <div>
-    
-    <app-file-upload
+    <ng-container *ngIf="formData.MediaFile; else elseBlock">
+      <audio controls controlsList="nodownload">
+        <source
+          src="https://s3.il-central-1.amazonaws.com/web.il.oxymoron-tech.com/{{
+            formData.MediaFile
+          }}"
+          type="audio/mpeg"
+        />
+      </audio>
+    </ng-container>
+    <ng-template #elseBlock>
+      <app-file-upload
+        [user]="userObj"
+        (uploadFileName)="uploadComplete($event)"
+        (uploadStarted)="uploadInProgress($event)"
+      ></app-file-upload>
+    </ng-template>
+
+    <!-- TODO: image upload fix 
+              1. make DnD
+              2. change function
+              3. add type? -->
+    <app-image-upload
       [user]="userObj"
-      (uploadFileName)="uploadComplete($event)"
-      (uploadStarted)="uploadInProgress()"
-    ></app-file-upload>
+      (uploadFileName)="imageUploadComplete($event)"
+      (uploadStarted)="imageUploadStart()"
+    ></app-image-upload>
+    <!-- <img
+      src="https://s3.il-central-1.amazonaws.com/web.il.oxymoron-tech.com/{{
+        formData.PosterName
+      }}"
+    /> -->
   </div>
   <label for="Title">Title: </label>
   <input
@@ -25,19 +51,6 @@
     required
   />
   <br />
-  <!-- <div (click)="visibleToggle()" class="visibleDiv">
-    {{ toggleText }}
-    <div
-      id="eyeDiv"
-      class="fa"
-      [ngClass]="{
-        'fa-eye-slash': formData.IsVisible,
-        'fa-eye': !formData.IsVisible,
-        'fa-clock': formData.Scheduled
-      }"
-    ></div>
-  </div>
-  <br /> -->
   <label for="Publish">Publish: </label>
   <app-toggle-slider
     [isChecked]="formData.IsVisible"
@@ -45,5 +58,5 @@
   ></app-toggle-slider>
   <br />
   <br />
-  <button type="button" (click)="onSubmit()" [disabled]="upload">Submit</button>
+  <button type="submit" [disabled]="upload">Submit</button>
 </form>

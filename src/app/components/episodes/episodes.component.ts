@@ -23,6 +23,7 @@ export class EpisodesComponent implements OnDestroy {
   public episodeList: any[] = [];
   private podcastID: string = '';
   private subscription: Subscription;
+  public isLoading: boolean = false;
 
   constructor(
     private episodeService: EpisodeService,
@@ -54,6 +55,7 @@ export class EpisodesComponent implements OnDestroy {
   }
 
   fetchEpisodes(): void {
+    this.isLoading = true;
     this.episodeService.get<any[]>(this.podcastID).subscribe(
       (response) => {
         this.episodeList = response;
@@ -67,9 +69,11 @@ export class EpisodesComponent implements OnDestroy {
           });
         });
         this.episodeList.reverse();
+        this.isLoading = false;
       },
       (error) => {
         console.error('Error fetching episodes:', error);
+        this.isLoading = false;
       }
     );
   }
