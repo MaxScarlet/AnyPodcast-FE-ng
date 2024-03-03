@@ -36,13 +36,14 @@ export class FileUploadComponent {
 
   onUploadInit(): void {
     console.log('user', this.user);
-    this.uploadStarted.emit(this.selectedFile?.name);
 
     if (!this.selectedFile) {
       console.error('No file selected');
       // Show a popup or provide user feedback
       return;
     }
+    this.uploadStarted.emit(this.selectedFile?.name);
+
     const partSize = 5 * 1024 * 1024; // min 5 MB part size (adjust as needed)
     const totalParts = Math.ceil(this.selectedFile.size / partSize);
 

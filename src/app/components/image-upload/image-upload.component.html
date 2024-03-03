@@ -1,7 +1,19 @@
+<!-- TODO: 1. Get rid of upload button -->
 <div>
-  <input type="file" (change)="onFileSelected($event)" />
-  <button type="button" (click)="onUploadInit()">Upload</button>
-  <div *ngIf="uploadProgress !== undefined">
-    <p>Upload Progress: {{ uploadProgress }}%</p>
-  </div>
+  <label for="episodeArtwork">Episode Artwork:</label>
+  <input
+    type="file"
+    id="episodeArtwork"
+    name="episodeArtwork"
+    accept="image/jpeg, image/jpe, image/jpg, image/png"
+    (change)="handleFileInputChange($event)"
+  />
+  <p>Accepted file types: jpeg, jpe, jpg, png. Max file size: 4MB</p>
 </div>
+<img
+  style="width: 100px"
+  id="imagePreview"
+  [src]="getImageUrl()"
+  alt="Episode Artwork Preview"
+  *ngIf="previewImageUrl !== undefined"
+/>

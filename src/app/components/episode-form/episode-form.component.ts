@@ -1,4 +1,4 @@
-import { Component, Input, Output } from '@angular/core';
+import { Component, Input, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, from } from 'rxjs';
 import { EpisodeService } from 'src/app/services/episode.service';
@@ -7,6 +7,7 @@ import { PodcastService } from 'src/app/services/podcast.service';
 import { PopupService } from 'src/app/services/popup.service';
 import { Location } from '@angular/common';
 import { User } from 'src/app/models/User';
+import { ImageUploadComponent } from '../image-upload/image-upload.component';
 
 //TODO: Rewrite as a model
 type EpisodeApiResponse = {
@@ -31,10 +32,10 @@ type EpisodeFormModel = Omit<EpisodeApiResponse, 'Created' | '_id'>;
   styleUrls: ['./episode-form.component.css'],
 })
 export class EpisodeFormComponent {
-  @Input() uploadFileName!: string;
   private _id: string = '';
+  @ViewChild(ImageUploadComponent) childComponent!: ImageUploadComponent;
   userObj: User = new User();
-  upload: boolean = false;
+  isUploadInProgress: boolean = false;
   toggleText: string = 'Unpublished';
   public isLoading: boolean = false;
 
@@ -60,7 +61,7 @@ export class EpisodeFormComponent {
 
   ngOnInit(): void {
     console.log('onInit episode form');
-    console.log('ngOnInit', this.upload);
+    console.log('ngOnInit', this.isUploadInProgress);
 
     this.route.params.subscribe((params) => {
       console.log('params', params);
@@ -84,20 +85,24 @@ export class EpisodeFormComponent {
 
   uploadComplete(fileName: string): void {
     this.formData.MediaFile = fileName;
-    this.upload = false;
-    console.log('uploadComplete', this.upload);
+    this.isUploadInProgress = false;
+    console.log('uploadComplete', this.isUploadInProgress);
   }
 
   uploadInProgress(fileNameOriginal: string): void {
-    this.upload = true;
+    this.isUploadInProgress = true;
     this.formData.MediaFileOriginal = fileNameOriginal;
-    console.log('uploadInProgress', this.upload);
+    console.log('uploadInProgress', this.isUploadInProgress);
   }
 
-  imageUploadStart() {}
+  imageUploadStart() {
+    console.log('imageUploadStart');
+  }
+
   imageUploadComplete(fileName: string): void {
     this.formData.PosterName = fileName;
-    console.log('uploadComplete', this.upload);
+    console.log('imageUploadComplete', this.isUploadInProgress);
+    this.updateEpisode();
   }
 
   visibleToggle(isChecked: boolean): void {
@@ -136,23 +141,24 @@ export class EpisodeFormComponent {
 
   onSubmit() {
     console.log('onSubmit');
-    let observable: Observable<EpisodeFormModel>;
+    this.childComponent.onUploadInit();
+  }
 
+  updateEpisode() {
     const { PodcastID, ...formDataWithoutPodcastID } = this.formData;
     console.log('onSubmit formData', this.formData);
-    observable = this.episodeService.update<EpisodeFormModel>(
-      formDataWithoutPodcastID,
-      this._id
-    );
-    observable.subscribe(
-      (response: any) => {
-        //TODO: rename file in s3 bucket
-        this.openMessage();
-      },
-      (error) => {
-        console.error('Error handling episode: ', error);
-      }
-    );
+
+    this.episodeService
+      .update<EpisodeFormModel>(formDataWithoutPodcastID, this._id)
+      .subscribe(
+        (response: any) => {
+          //TODO: rename file in s3 bucket
+          this.openMessage();
+        },
+        (error) => {
+          console.error('Error handling episode: ', error);
+        }
+      );
   }
 
   openMessage() {
