@@ -1,18 +1,16 @@
 // episodes.component.ts
 
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { EpisodeService } from '../../services/episode.service';
-import { GlobalService } from 'src/app/services/global.service';
+import { Component, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { PopupComponent } from '../popup/popup.component';
-import { PopupService } from 'src/app/services/popup.service';
 import {
-  ActivatedRoute,
-  NavigationEnd,
-  NavigationStart,
-  Router,
+    ActivatedRoute,
+    Router
 } from '@angular/router';
-import { Subscription, firstValueFrom } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { GlobalService } from 'src/app/services/global.service';
+import { PopupService } from 'src/app/services/popup.service';
+import { EpisodeService } from '../../services/episode.service';
+import { Episode } from 'src/app/models/Episode';
 
 @Component({
   selector: 'app-episodes',
@@ -20,7 +18,7 @@ import { Subscription, firstValueFrom } from 'rxjs';
   styleUrls: ['./episodes.component.css'],
 })
 export class EpisodesComponent implements OnDestroy {
-  public episodeList: any[] = [];
+  public episodeList: Episode[] = [];
   private podcastID: string = '';
   private subscription: Subscription;
   public isLoading: boolean = false;
@@ -56,7 +54,7 @@ export class EpisodesComponent implements OnDestroy {
 
   fetchEpisodes(): void {
     this.isLoading = true;
-    this.episodeService.get<any[]>(this.podcastID).subscribe(
+    this.episodeService.get<Episode>(this.podcastID).subscribe(
       (response) => {
         this.episodeList = response;
         this.episodeList.forEach((item) => {

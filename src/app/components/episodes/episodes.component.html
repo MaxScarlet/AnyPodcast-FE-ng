@@ -13,28 +13,35 @@
   </div>
 
   <div class="episode-list" *ngIf="!isLoading">
-    <ul *ngFor="let episode of episodeList">
-      <li>
-        <div class="visibleWrapper">
+    <ul>
+      <li *ngFor="let episode of episodeList" class="itemWrapper">
+        <img
+          class="posterImage"
+          [src]="globalService.imageURL(episode.PosterName)"
+          alt="episodePoster"
+        />
+        <div class="textWrapper">
+          <b class="episode-title">{{ episode.Title }}</b>
+          <p class="episode-description">{{ episode.Description }}</p>
+          <button
+            class="fa fa-edit"
+            routerLink="/podcast/{{ this.globalService.PodcastID }}/episode/{{
+              episode._id
+            }}"
+          ></button>
+
+          <button class="fa fa-remove" (click)="openPrompt(episode)"></button>
+        </div>
+        <div class="eyeDateWrapper">
           <div
-            class="episode-visble fa"
+            class="episode-visible fa"
             [ngClass]="{
             'fa-eye': episode.IsVisible,
             'fa-eye-slash': !episode.IsVisible,
           }"
           ></div>
+          <div class="episode-created">{{ episode.Created }}</div>
         </div>
-        <b class="episode-title">{{ episode.Title }}</b>
-        <p class="episode-description">{{ episode.Description }}</p>
-        <button
-          class="fa fa-edit"
-          routerLink="/podcast/{{ this.globalService.PodcastID }}/episode/{{
-            episode._id
-          }}"
-        ></button>
-        <p class="episode-created">{{ episode.Created }}</p>
-
-        <button class="fa fa-remove" (click)="openPrompt(episode)"></button>
       </li>
     </ul>
   </div>

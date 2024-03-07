@@ -1,4 +1,12 @@
-<form>
+<form (ngSubmit)="onSubmit()">
+  <app-image-upload
+    [user]="userObj"
+    [previewURL]="formData.PosterName"
+    (uploadComplete)="imageUploadComplete($event)"
+    (uploadStarted)="imageUploadStart()"
+  >
+  </app-image-upload>
+  <br />
   <label for="name">Title: </label>
   <input
     type="text"
@@ -17,5 +25,5 @@
     required
   />
   <br />
-  <button type="button" (click)="onSubmit()">Save</button>
+  <button type="submit">Submit</button>
 </form>

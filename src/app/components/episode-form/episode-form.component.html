@@ -23,18 +23,11 @@
               2. change function
               3. add type? -->
     <app-image-upload
-      *ngIf="formData.PosterName"
       [user]="userObj"
       [previewURL]="formData.PosterName"
-      (uploadFileName)="imageUploadComplete($event)"
+      (uploadComplete)="imageUploadComplete($event)"
       (uploadStarted)="imageUploadStart()"
     ></app-image-upload>
-    <!-- <img
-      style="width: 32px"
-      src="https://s3.il-central-1.amazonaws.com/web.il.oxymoron-tech.com/{{
-        formData.PosterName
-      }}"
-    /> -->
   </div>
   <label for="Title">Title: </label>
   <input

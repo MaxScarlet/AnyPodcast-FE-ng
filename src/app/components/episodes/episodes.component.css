@@ -12,9 +12,26 @@ ul {
   padding: 0;
 }
 
-.visibleWrapper{
-    float: right;
+.itemWrapper {
+  display: grid;
+  grid-template-columns: 10% 80% 10%;
+  justify-content: left;
 }
+
+.posterImage {
+  width: 100px;
+  /* max-height: 100px; */
+  margin-right: 10px;
+}
+
+.eyeDateWrapper {
+  height: 100%;
+  
+  display: grid;
+  justify-content: center;
+  grid-template-rows: 80% auto;
+}
+
 li {
   margin-bottom: 10px;
   padding: 10px;
@@ -49,6 +66,6 @@ li button:disabled {
 }
 
 .episode-created {
-  float: right;
-  font-size : 10px ;
+  font-size: 10px;
+  color: var(--text-color);
 }

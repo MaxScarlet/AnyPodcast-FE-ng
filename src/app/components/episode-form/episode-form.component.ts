@@ -8,23 +8,7 @@ import { PopupService } from 'src/app/services/popup.service';
 import { Location } from '@angular/common';
 import { User } from 'src/app/models/User';
 import { ImageUploadComponent } from '../image-upload/image-upload.component';
-
-//TODO: Rewrite as a model
-type EpisodeApiResponse = {
-  _id: string;
-  Created: string;
-  IsVisible: boolean;
-  PodcastID?: string;
-  Title: string;
-  Description: string;
-  Scheduled: string;
-  UploadID: string;
-  PosterName: string;
-  MediaFile: string;
-  MediaFileOriginal: string;
-};
-
-type EpisodeFormModel = Omit<EpisodeApiResponse, 'Created' | '_id'>;
+import { Episode } from 'src/app/models/Episode';
 
 @Component({
   selector: 'app-episode-form',
@@ -33,7 +17,7 @@ type EpisodeFormModel = Omit<EpisodeApiResponse, 'Created' | '_id'>;
 })
 export class EpisodeFormComponent {
   private _id: string = '';
-  @ViewChild(ImageUploadComponent) childComponent!: ImageUploadComponent;
+  @ViewChild(ImageUploadComponent) imageUploadComponent!: ImageUploadComponent;
   userObj: User = new User();
   isUploadInProgress: boolean = false;
   toggleText: string = 'Unpublished';
@@ -47,17 +31,7 @@ export class EpisodeFormComponent {
     private popupService: PopupService
   ) {}
 
-  public formData: EpisodeFormModel = {
-    PodcastID: '',
-    IsVisible: false,
-    Title: '',
-    Description: '',
-    Scheduled: '',
-    UploadID: '',
-    PosterName: '',
-    MediaFile: '',
-    MediaFileOriginal: '',
-  };
+  public formData: Episode = new Episode()
 
   ngOnInit(): void {
     console.log('onInit episode form');
@@ -111,7 +85,7 @@ export class EpisodeFormComponent {
   }
 
   getEpisode() {
-    this.episodeService.getByID<EpisodeFormModel>(this._id).subscribe(
+    this.episodeService.getByID<Episode>(this._id).subscribe(
       (response) => {
         this.formData = response;
         console.log(this.formData);
@@ -123,12 +97,11 @@ export class EpisodeFormComponent {
   }
 
   createEpisode() {
-    let observable: Observable<EpisodeFormModel>;
+    let observable: Observable<Episode>;
     this.formData.PodcastID = this.globalService.PodcastID;
-    observable = this.episodeService.create<EpisodeFormModel>(this.formData);
+    observable = this.episodeService.create<Episode>(this.formData);
     observable.subscribe(
-      (response: any) => {
-        //TODO: rename file in s3 bucket
+      (response: Episode) => {
         this.router.navigate([
           `/podcast/${this.globalService.PodcastID}/episode/${response._id}`,
         ]);
@@ -141,7 +114,7 @@ export class EpisodeFormComponent {
 
   onSubmit() {
     console.log('onSubmit');
-    this.childComponent.onUploadInit();
+    this.imageUploadComponent.onUploadInit();
   }
 
   updateEpisode() {
@@ -149,9 +122,9 @@ export class EpisodeFormComponent {
     console.log('onSubmit formData', this.formData);
 
     this.episodeService
-      .update<EpisodeFormModel>(formDataWithoutPodcastID, this._id)
+      .update<Episode>(formDataWithoutPodcastID, this._id)
       .subscribe(
-        (response: any) => {
+        (response: Episode) => {
           //TODO: rename file in s3 bucket
           this.openMessage();
         },

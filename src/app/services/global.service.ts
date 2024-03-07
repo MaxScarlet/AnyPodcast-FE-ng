@@ -12,6 +12,8 @@ export class GlobalService {
   private podcastId = new BehaviorSubject<string>('');
   public PodcastID$ = this.podcastId.asObservable();
   public UserID: string = '';
+  public readonly prefixForImage =
+    'https://s3.il-central-1.amazonaws.com/web.il.oxymoron-tech.com/';
 
   private _appVar = new BehaviorSubject<string>('initialValue');
   public appVar$ = this._appVar.asObservable();
@@ -22,6 +24,13 @@ export class GlobalService {
     private podcastService: PodcastService
   ) {
     console.log('global service constructor');
+  }
+
+  imageURL(fileName: string) {
+    if (!fileName) {
+      return '';
+    }
+    return `${this.prefixForImage}${fileName}`;
   }
 
   async init() {

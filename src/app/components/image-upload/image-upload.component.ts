@@ -9,6 +9,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { Upload } from 'src/app/models/Upload';
 import { User } from 'src/app/models/User';
+import { GlobalService } from 'src/app/services/global.service';
 import { environment } from 'src/environment';
 
 @Component({
@@ -19,33 +20,25 @@ import { environment } from 'src/environment';
 export class ImageUploadComponent {
   @Input() user: User = new User();
   @Input() previewURL!: string;
-  @Output() uploadFileName = new EventEmitter<string>();
+  @Output() uploadComplete = new EventEmitter<string>();
   @Output() uploadStarted = new EventEmitter<string>();
 
   selectedFile: File | null = null;
   uploadProgress: number | undefined;
   private baseUrl = `${environment.fileMngUrl}/upload`;
   public previewImageUrl: string = '';
-  private readonly prefixForImage =
-    'https://s3.il-central-1.amazonaws.com/web.il.oxymoron-tech.com/';
-  constructor(private http: HttpClient) {}
+
+  constructor(private http: HttpClient, private globalService: GlobalService) {}
 
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',
   });
 
-  test() {
-    console.log('IMAGE upload test');
-  }
   getImageUrl(): string {
     if (this.previewImageUrl) {
       return this.previewImageUrl;
     }
-    return this.imageURL(this.previewURL);
-  }
-
-  imageURL(fileName: string) {
-    return `${this.prefixForImage}${fileName}`;
+    return this.globalService.imageURL(this.previewURL);
   }
 
   onFileSelected(event: any): void {
@@ -77,7 +70,6 @@ export class ImageUploadComponent {
         };
 
         reader.readAsDataURL(file);
-        // TODO: integrate onUploadInit()
       }
     }
   }
@@ -86,29 +78,29 @@ export class ImageUploadComponent {
     console.log('user', this.user);
 
     if (!this.selectedFile) {
-      console.error('No file selected');
-      // Show a popup or provide user feedback
-      return;
+      console.warn('No file selected');
+      this.uploadComplete.emit();
+    } else {
+      this.uploadStarted.emit(this.selectedFile?.name);
+
+      let upload: Upload = {
+        FileName: this.selectedFile.name,
+        User: this.user,
+        Size: this.selectedFile.size,
+      };
+
+      const options = {
+        headers: this.headers,
+        reportProgress: true,
+      };
+
+      this.http.post<any>(`${this.baseUrl}`, upload, options).subscribe(
+        (uploadResp: Upload) => this.apiHandlerUpload(uploadResp),
+        (error: HttpErrorResponse) => {
+          console.error('Error initiating multipart upload', error);
+        }
+      );
     }
-    this.uploadStarted.emit(this.selectedFile?.name);
-
-    let upload: Upload = {
-      FileName: this.selectedFile.name,
-      User: this.user,
-      Size: this.selectedFile.size,
-    };
-
-    const options = {
-      headers: this.headers,
-      reportProgress: true,
-    };
-
-    this.http.post<any>(`${this.baseUrl}`, upload, options).subscribe(
-      (uploadResp: Upload) => this.apiHandlerUpload(uploadResp),
-      (error: HttpErrorResponse) => {
-        console.error('Error initiating multipart upload', error);
-      }
-    );
   }
 
   private apiHandlerUpload(uploadResp: Upload) {
@@ -119,6 +111,7 @@ export class ImageUploadComponent {
       const modifiedFile = new File([this.selectedFile!], uploadResp.FileName, {
         type: this.selectedFile!.type,
       });
+      console.log('Modified file: ', modifiedFile);
 
       this.http
         .put(presignedUrl, modifiedFile, {
@@ -136,11 +129,14 @@ export class ImageUploadComponent {
   }
 
   private presignedURLHandler(event: any, uploadResp: Upload) {
+    console.log('Presigned URL');
+
     if (event.type === HttpEventType.UploadProgress) {
       this.uploadProgress = Math.round((100 * event.loaded) / event.total!);
     } else if (event instanceof HttpResponse) {
       this.uploadProgress = undefined;
-      this.uploadFileName.emit(uploadResp.FileName);
+      console.log('completed successfully', uploadResp);
+      this.uploadComplete.emit(uploadResp.FileName);
     }
   }
 }
