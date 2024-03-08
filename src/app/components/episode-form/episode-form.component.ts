@@ -1,4 +1,10 @@
-import { Component, Input, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  ViewChild,
+  HostListener,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, from } from 'rxjs';
 import { EpisodeService } from 'src/app/services/episode.service';
@@ -22,7 +28,7 @@ export class EpisodeFormComponent {
   isUploadInProgress: boolean = false;
   toggleText: string = 'Unpublished';
   public isLoading: boolean = false;
-
+  msgText: string = '';
   constructor(
     private route: ActivatedRoute,
     private episodeService: EpisodeService,
@@ -31,7 +37,7 @@ export class EpisodeFormComponent {
     private popupService: PopupService
   ) {}
 
-  public formData: Episode = new Episode()
+  public formData: Episode = new Episode();
 
   ngOnInit(): void {
     console.log('onInit episode form');
@@ -61,12 +67,26 @@ export class EpisodeFormComponent {
     this.formData.MediaFile = fileName;
     this.isUploadInProgress = false;
     console.log('uploadComplete', this.isUploadInProgress);
+    this.updateEpisode();
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    // if (this.isUploadInProgress) {
+    $event.returnValue = true;
+    alert('HostListener');
+    this.msgText = 'Changes aren`t submitted';
+    // }
   }
 
   uploadInProgress(fileNameOriginal: string): void {
     this.isUploadInProgress = true;
     this.formData.MediaFileOriginal = fileNameOriginal;
     console.log('uploadInProgress', this.isUploadInProgress);
+  }
+
+  imageChanged() {
+    this.msgText = 'Unsaved image';
   }
 
   imageUploadStart() {
@@ -125,8 +145,7 @@ export class EpisodeFormComponent {
       .update<Episode>(formDataWithoutPodcastID, this._id)
       .subscribe(
         (response: Episode) => {
-          //TODO: rename file in s3 bucket
-          this.openMessage();
+          this.msgText = 'SAVED';
         },
         (error) => {
           console.error('Error handling episode: ', error);

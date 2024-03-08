@@ -20,7 +20,7 @@ export class FileUploadComponent {
   @Output() uploadStarted = new EventEmitter<string>();
 
   selectedFile: File | null = null;
-  uploadProgress: number | undefined;
+  uploadProgress: number = 0;
   private baseUrl = `${environment.fileMngUrl}/upload`;
   constructor(private http: HttpClient) {}
 
@@ -32,6 +32,27 @@ export class FileUploadComponent {
     console.log('user', this.user);
     this.selectedFile = event.target.files[0];
     console.log(this.selectedFile);
+    this.onUploadInit();
+  }
+
+  onFileDrop(event: any) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.selectedFile = event.dataTransfer.files[0];
+    this.onUploadInit();
+  }
+
+  onDragOver(event: any) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.dataTransfer.dropEffect = 'copy';
+    event.target.classList.add('drag-over');
+  }
+
+  onDragLeave(event: any) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.target.classList.remove('drag-over');
   }
 
   onUploadInit(): void {
@@ -73,6 +94,7 @@ export class FileUploadComponent {
           const filePart = this.selectedFile!.slice(start, end);
           const part = upload.Parts![partNumber - 1]; // Retrieve pre-signed URL for this part
 
+          
           this.http
             .put(part.PresignedUrl, filePart, {
               observe: 'response',
@@ -82,11 +104,13 @@ export class FileUploadComponent {
               (response) => {
                 if (response.status === 200 || response.status === 204) {
                   console.log('Part uploaded to S3', response);
-                  this.uploadProgress = Math.round(
-                    (partNumber / totalParts) * 100
-                  );
-
                   uploadedPartsCnt++;
+
+                  this.uploadProgress = Math.round(
+                    (uploadedPartsCnt / totalParts) * 100
+                  );
+                  console.log('progress', this.uploadProgress);
+
                   // Extract ETag header from the response, and remove quotes
                   const eTag = response.headers.get('ETag')?.replace(/"/g, '');
                   uploadedParts.push({ PartNumber: partNumber, ETag: eTag });
@@ -107,7 +131,7 @@ export class FileUploadComponent {
                             'Multipart upload completed successfully',
                             completeResponse
                           );
-                          this.uploadProgress = undefined;
+                          //   this.uploadProgress = 0;
                           this.uploadFileName.emit(completeResponse.FileName);
                         },
                         (error) => {
@@ -115,7 +139,7 @@ export class FileUploadComponent {
                             'Error completing multipart upload',
                             error
                           );
-                          this.uploadProgress = undefined;
+                          //   this.uploadProgress = 0;
                         }
                       );
                   }

@@ -5,3 +5,17 @@ button:disabled {
   background-color: grey;
   cursor: none;
 }
+
+.msgText {
+  width: fit-content;
+  color: var(--btn-color);
+  background-color: var(--background-color);
+}
+.submitWrapper {
+  display: flex; /* Use flexbox */
+  align-items: center; /* Center vertically */
+}
+
+.submitWrapper button {
+  margin-right: 10px; /* Add some spacing between button and message text */
+}

@@ -1,18 +1,20 @@
-<div>
-  <label for="episodeArtwork">Episode Artwork:</label>
-  <input
-    type="file"
-    id="episodeArtwork"
-    name="episodeArtwork"
-    accept="image/jpeg, image/jpe, image/jpg, image/png"
-    (change)="handleFileInputChange($event)"
-  />
-  <p>Accepted file types: jpeg, jpe, jpg, png. Max file size: 4MB</p>
-</div>
+<input
+  type="file"
+  id="episodeArtwork"
+  name="episodeArtwork"
+  accept="image/jpeg, image/jpe, image/jpg, image/png"
+  #imageInput
+  style="display: none"
+  (change)="handleFileInputChange($event)"
+/>
 <img
   style="width: 100px"
   id="imagePreview"
   [src]="getImageUrl()"
-  alt="Episode Artwork Preview"
+  alt="Artwork"
   *ngIf="previewImageUrl !== undefined"
 />
+<br>
+<button type="button" (click)="imageInput.click()">Select image</button>
+
+<p>Accepted file types: jpeg, jpe, jpg, png. Max file size: 4MB</p>

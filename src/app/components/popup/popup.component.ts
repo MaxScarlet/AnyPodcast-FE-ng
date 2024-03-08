@@ -39,7 +39,7 @@ export class PopupComponent {
   }
 
   handleLIClick(_id: string): void {
-    this.globalService.PodcastID = _id;
+    this.globalService.Podcast._id = _id;
     this.cookieService.set('podcastID', this.globalService.PodcastID, {
       path: '/',
     });

@@ -1,10 +1,20 @@
-
 <!-- TODO: 1. Change to drag and drop get rid of upload button (On drop => upload)  
            2. Add option to replace audio file-->
-<div>
-  <input type="file" (change)="onFileSelected($event)" />
-  <button type="button" (click)="onUploadInit()">Upload</button>
-  <div *ngIf="uploadProgress !== undefined">
-    <p>Upload Progress: {{ uploadProgress }}%</p>
+<div
+  class="drag-drop-zone"
+  (drop)="onFileDrop($event)"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)"
+>
+  <button type="button" (click)="fileInput.click()">Select File</button>
+  <input
+    type="file"
+    (change)="onFileSelected($event)"
+    #fileInput
+    style="display: none"
+    accept="audio/*"
+  />
+  <div class="progress-bar">
+    <div class="progress" [style.width.%]="uploadProgress"></div>
   </div>
 </div>

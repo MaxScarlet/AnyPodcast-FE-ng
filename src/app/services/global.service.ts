@@ -3,12 +3,19 @@ import { AuthService } from '@auth0/auth0-angular';
 import { CookieService } from 'ngx-cookie-service';
 import { PodcastService } from './podcast.service';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
+import { Podcast } from '../models/Podcast';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GlobalService {
-  public PodcastID: string = '';
+  //   public PodcastID: string = '';
+  public Podcast = new Podcast();
+
+  public get PodcastID(): string {
+    return this.Podcast._id;
+  }
+
   private podcastId = new BehaviorSubject<string>('');
   public PodcastID$ = this.podcastId.asObservable();
   public UserID: string = '';
@@ -28,7 +35,7 @@ export class GlobalService {
 
   imageURL(fileName: string) {
     if (!fileName) {
-      return '';
+      return `${this.prefixForImage}${this.Podcast.PosterName}`;
     }
     return `${this.prefixForImage}${fileName}`;
   }
@@ -74,24 +81,27 @@ export class GlobalService {
   }
 
   private async getPodcastID() {
-    const cookie = this.cookieService.get('podcastID');
-    console.log('Cookie ', cookie);
-    if (cookie) {
-      this.PodcastID = cookie;
-      console.log('cookie getPodcastID');
+    const cookiePodcastID = this.cookieService.get('podcastID');
+    console.log('Cookie ', cookiePodcastID);
+    if (cookiePodcastID) {
+      const response: Podcast = await firstValueFrom(
+        this.podcastService.getByID<Podcast>(cookiePodcastID)
+      );
+      this.Podcast = response;
+      console.log('cookie response', response);
     } else if (this.UserID) {
       console.log('else if getPodcastID');
 
       try {
-        const response = await firstValueFrom(
-          this.podcastService.get<any>(this.UserID)
+        const response: Podcast[] = await firstValueFrom(
+          this.podcastService.get<Podcast>(this.UserID)
         );
 
         console.log('service getPodcastID');
 
         if (response && response[0]) {
-          this.PodcastID = response[0]._id;
-          this.cookieService.set('podcastID', this.PodcastID, { path: '/' });
+          this.Podcast = response[0];
+          this.cookieService.set('podcastID', response[0]._id, { path: '/' });
         } else {
           console.warn('Podcasts not found');
         }

@@ -2,15 +2,19 @@
 
 import { Component, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import {
-    ActivatedRoute,
-    Router
-} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { GlobalService } from 'src/app/services/global.service';
 import { PopupService } from 'src/app/services/popup.service';
 import { EpisodeService } from '../../services/episode.service';
 import { Episode } from 'src/app/models/Episode';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
+import { Upload } from 'src/app/models/Upload';
+import { environment } from 'src/environment';
 
 @Component({
   selector: 'app-episodes',
@@ -22,14 +26,18 @@ export class EpisodesComponent implements OnDestroy {
   private podcastID: string = '';
   private subscription: Subscription;
   public isLoading: boolean = false;
-
+  private fileMngUrl = `${environment.fileMngUrl}/upload`;
+  private headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+  });
   constructor(
     private episodeService: EpisodeService,
     public globalService: GlobalService,
     public dialog: MatDialog,
     private popupService: PopupService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private http: HttpClient
   ) {
     console.log('Episodes Constructor');
     this.subscription = this.globalService.appVar$.subscribe((value) => {
@@ -86,14 +94,33 @@ export class EpisodesComponent implements OnDestroy {
       })
       .subscribe((result) => {
         if (result) {
-          this.deleteEpisode(episode._id);
+          this.deleteEpisode(episode);
         }
       });
   }
 
-  deleteEpisode(id: string): void {
-    this.episodeService.delete(id).subscribe(
+  deleteEpisode(episode: Episode): void {
+    this.episodeService.delete(episode._id).subscribe(
       (response) => {
+        this.http
+          .patch<any>(
+            `${this.fileMngUrl}`,
+            [
+              { fileName: episode.PosterName },
+              { fileName: episode.MediaFile },
+            ],
+            {
+              headers: this.headers,
+            }
+          )
+          .subscribe(
+            (resp: Upload) => {
+              console.log('Deleted Episode', resp);
+            },
+            (error: HttpErrorResponse) => {
+              console.error('Error initiating multipart upload', error);
+            }
+          );
         this.fetchEpisodes();
       },
       (error) => {

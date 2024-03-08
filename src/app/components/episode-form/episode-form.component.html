@@ -17,17 +17,6 @@
         (uploadStarted)="uploadInProgress($event)"
       ></app-file-upload>
     </ng-template>
-
-    <!-- TODO: image upload fix 
-              1. make DnD
-              2. change function
-              3. add type? -->
-    <app-image-upload
-      [user]="userObj"
-      [previewURL]="formData.PosterName"
-      (uploadComplete)="imageUploadComplete($event)"
-      (uploadStarted)="imageUploadStart()"
-    ></app-image-upload>
   </div>
   <label for="Title">Title: </label>
   <input
@@ -47,12 +36,23 @@
     required
   />
   <br />
+
+  <app-image-upload
+    [user]="userObj"
+    [previewURL]="formData.PosterName"
+    (uploadComplete)="imageUploadComplete($event)"
+    (uploadStarted)="imageUploadStart()"
+    (imageChanged)="imageChanged()"
+  ></app-image-upload>
+
   <label for="Publish">Publish: </label>
   <app-toggle-slider
     [isChecked]="formData.IsVisible"
     (toggle)="visibleToggle($event)"
   ></app-toggle-slider>
   <br />
-  <br />
-  <button type="submit" [disabled]="isUploadInProgress">Submit</button>
+  <div class="submitWrapper">
+    <button type="submit" [disabled]="isUploadInProgress">Submit</button>
+    <div class="msgText" *ngIf="msgText">{{ msgText }}</div>
+  </div>
 </form>

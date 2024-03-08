@@ -22,6 +22,7 @@ export class ImageUploadComponent {
   @Input() previewURL!: string;
   @Output() uploadComplete = new EventEmitter<string>();
   @Output() uploadStarted = new EventEmitter<string>();
+  @Output() imageChanged = new EventEmitter<string>();
 
   selectedFile: File | null = null;
   uploadProgress: number | undefined;
@@ -61,6 +62,7 @@ export class ImageUploadComponent {
           img.onload = () => {
             if (img.width > 0 && img.height > 0) {
               this.previewImageUrl = event.target?.result as string;
+              this.imageChanged.emit();
             } else {
               alert('The selected file is not a valid image.');
               target.value = '';

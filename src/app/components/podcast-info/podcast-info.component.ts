@@ -55,8 +55,6 @@ export class PodcastInfoComponent {
     }
     console.log('imageUploadComplete', fileName);
     this.updatePodcast();
-
-    //TODO: Redirect to episodes page
   }
 
   getPodcast() {
@@ -87,7 +85,7 @@ export class PodcastInfoComponent {
     this.podcastService.create<Podcast>(this.formData).subscribe(
       (response: Podcast) => {
         console.log('response', response);
-        this.globalService.PodcastID = response._id;
+        this.globalService.Podcast = response;
         this.userObj.PodcastId = response._id;
 
         this.formData = response;
@@ -108,7 +106,7 @@ export class PodcastInfoComponent {
       .subscribe(
         (response: Podcast) => {
           console.log('response', response);
-          this.globalService.PodcastID = response._id;
+          this.globalService.Podcast = response;
           this.router.navigate([
             `/podcast/${this.globalService.PodcastID}/episode`,
           ]);
