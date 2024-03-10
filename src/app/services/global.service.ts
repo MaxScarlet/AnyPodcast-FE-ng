@@ -9,7 +9,6 @@ import { Podcast } from '../models/Podcast';
   providedIn: 'root',
 })
 export class GlobalService {
-  //   public PodcastID: string = '';
   public Podcast = new Podcast();
 
   public get PodcastID(): string {
@@ -53,16 +52,6 @@ export class GlobalService {
   private async getUserID() {
     console.log('get user ID');
 
-    // this.auth.user$.subscribe((userSub) => {
-    //   console.log('getUserID');
-
-    //   if (userSub && userSub.sub) {
-    //     this.UserID = userSub.sub.split('|')[1];
-    //     this.getPodcastID();
-    //   } else {
-    //     // throw new Error('Error getting user ID');
-    //   }
-    // });
 
     const userSub = await firstValueFrom(this.auth.user$);
     console.log('userSub: ', userSub);
@@ -72,7 +61,6 @@ export class GlobalService {
 
       await this.getPodcastID();
     } else {
-      // throw new Error('Error getting user ID');
     }
   }
 

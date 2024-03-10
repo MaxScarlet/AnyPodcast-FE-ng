@@ -70,6 +70,7 @@ export class EpisodeFormComponent {
     this.updateEpisode();
   }
 
+  //TODO: trigger a notification when user hasn't uploaded yet
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any) {
     // if (this.isUploadInProgress) {

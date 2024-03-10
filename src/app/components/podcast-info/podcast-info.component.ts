@@ -117,17 +117,4 @@ export class PodcastInfoComponent {
       );
   }
 
-  //   openMessage() {
-  //     this.popupService
-  //       .openPopup({
-  //         title: 'Create podcast',
-  //         message: `Podcast "${this.formData.Title}" created successfully`,
-  //         confirmButtonText: 'Ok',
-  //       })
-  //       .subscribe((result) => {
-  //         if (result) {
-  //           this.router.navigate(['podcast-info']);
-  //         }
-  //       });
-  //   }
 }
