@@ -1,12 +1,17 @@
 <div class="list-container">
-  <h2>
+  <h1>
     Episodes
     <button
       class="fa fa-plus"
+      style="
+        font-size: medium !important;
+        padding-left: 13px;
+        padding-right: 13px;
+      "
       title="Add new episode"
       routerLink="/podcast/{{ this.globalService.PodcastID }}/episode/create"
     ></button>
-  </h2>
+  </h1>
 
   <div *ngIf="isLoading" class="loading-spinner">
     <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
@@ -14,15 +19,19 @@
 
   <div class="episode-list" *ngIf="!isLoading">
     <ul>
-      <li *ngFor="let episode of episodeList" class="itemWrapper">
+      <li
+        *ngFor="let episode of episodeList"
+        class="itemWrapper"
+        [class.draftWrapper]="episode.Title.includes('Untitled')"
+      >
         <img
           class="posterImage"
           [src]="globalService.imageURL(episode.PosterName)"
           alt="episodePoster"
         />
         <div class="textWrapper">
-          <b class="episode-title" >{{ episode.Title }}</b>
-          <p class="episode-description" >{{ episode.Description }}</p>
+          <b class="episode-title">{{ episode.Title }}</b>
+          <p class="episode-description">{{ episode.Description }}</p>
           <button
             class="fa fa-edit"
             routerLink="/podcast/{{ this.globalService.PodcastID }}/episode/{{
@@ -40,6 +49,7 @@
             'fa-eye-slash': !episode.IsVisible,
           }"
           ></div>
+          <b *ngIf="episode.Title.includes('Untitled')">Draft</b>
           <div class="episode-created">{{ episode.Created }}</div>
         </div>
       </li>

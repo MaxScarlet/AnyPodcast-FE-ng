@@ -1,4 +1,15 @@
+<h1>Episode</h1>
 <form (ngSubmit)="onSubmit()">
+  <div class="formElem">
+    <label for="Title">Title: </label>
+    <input
+      type="text"
+      id="Title"
+      name="Title"
+      [(ngModel)]="formData.Title"
+      required
+    />
+  </div>
   <div>
     <ng-container *ngIf="formData.MediaFile; else elseBlock">
       <audio controls controlsList="nodownload">
@@ -18,24 +29,18 @@
       ></app-file-upload>
     </ng-template>
   </div>
-  <label for="Title">Title: </label>
-  <input
-    type="text"
-    id="Title"
-    name="Title"
-    [(ngModel)]="formData.Title"
-    required
-  />
-  <br />
-  <label for="Description">Description: </label>
-  <input
-    type="text"
-    id="Description"
-    name="Description"
-    [(ngModel)]="formData.Description"
-    required
-  />
-  <br />
+
+  <div class="formElem">
+    <label for="Description">Description: </label>
+    <br />
+    <textarea
+      type="text"
+      id="Description"
+      name="Description"
+      [(ngModel)]="formData.Description"
+      required
+    ></textarea>
+  </div>
 
   <app-image-upload
     [user]="userObj"

@@ -4,6 +4,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { PodcastService } from './podcast.service';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { Podcast } from '../models/Podcast';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +28,8 @@ export class GlobalService {
   constructor(
     private auth: AuthService,
     private cookieService: CookieService,
-    private podcastService: PodcastService
+    private podcastService: PodcastService,
+    private router: Router
   ) {
     console.log('global service constructor');
   }
@@ -52,18 +54,22 @@ export class GlobalService {
   private async getUserID() {
     console.log('get user ID');
 
-
     const userSub = await firstValueFrom(this.auth.user$);
     console.log('userSub: ', userSub);
 
     if (userSub && userSub.sub) {
       this.UserID = userSub.sub.split('|')[1];
 
+      const config = await this.getConfig();
       await this.getPodcastID();
-    } else {
+      if (!this.Podcast._id) {
+        this.router.navigate(['/podcast/create']);
+      }
     }
   }
 
+  // TODO: Make this work
+  private async getConfig() {}
   public updateAppVar(newValue: string) {
     this._appVar.next(newValue);
   }
