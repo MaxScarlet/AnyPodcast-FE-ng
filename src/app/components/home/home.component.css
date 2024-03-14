@@ -1,4 +1,25 @@
-b {
-  color: var(--primary-color);
-  font-size: x-large;
+/* .poster {
+  height: 75vh;
+  background-size: cover;
+  background-position: center;
+} */
+
+/* .imgPoster {
+  width: calc(100% + 20px);
+  margin: -10px;
+} */
+
+.poster {
+  width: calc(100vw +20px);
+  height: calc(100vh - 40px - 96px);
+  margin: -10px;
+  background-image: url("/assets/images/Poster.jpg");
+  background-size: cover;
+  background-position: top center;
+}
+
+@media screen and (max-width: 768px) {
+  /* .imgPoster {
+    background-size: contain;
+  } */
 }

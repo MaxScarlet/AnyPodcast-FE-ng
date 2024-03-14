@@ -28,11 +28,13 @@ export class PodcastInfoComponent {
 
   public formData: Podcast = new Podcast();
 
+  //TODO: Add notification if you leave the page without uploading/submitting
+  
   ngOnInit(): void {
     this.route.params.subscribe((params: any) => {
       this.userObj.UserId = this.globalService.UserID;
       this.userObj.PodcastId = this.globalService.PodcastID;
-      this.formData.PosterName = `DefaultPoster.PNG`
+      this.formData.PosterName = this.globalService.defaultPosterName();
       console.log('UserOBJ', this.userObj);
 
       if (this.router.url.includes('create')) {
@@ -117,5 +119,4 @@ export class PodcastInfoComponent {
         }
       );
   }
-
 }

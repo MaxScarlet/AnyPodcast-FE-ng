@@ -1,9 +1,51 @@
-p {
-  font-size: large;
-  text-align: center;
+.container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-p b {
-  color: var(--primary-color);
-  font-size: x-large;
+.image {
+  max-width: 400px;
+  margin-right: 20px;
 }
+
+.text {
+  flex: 1; /* Take remaining space */
+  font-size: x-large;
+  text-align: left;
+  line-height: normal;
+  float: right;
+}
+
+@media screen and (max-width: 700px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .image {
+    margin-bottom: 20px;
+    margin-right: 0px;
+  }
+}
+
+@media screen and (min-width: 1000px){
+    .text{
+        font-size: xx-large;
+    }
+}
+/* p {
+  display: block;
+
+}
+
+img {
+  width: 400px;
+  margin-right: 20px;
+  float: left;
+} */
+/* div {
+  display: flex;
+  grid-template-columns: 30% 70%;
+  align-items: center;
+} */

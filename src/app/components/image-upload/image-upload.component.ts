@@ -64,7 +64,7 @@ export class ImageUploadComponent {
               this.previewImageUrl = event.target?.result as string;
               this.imageChanged.emit();
             } else {
-              alert('The selected file is not a valid image.');
+              console.error('The selected file is not a valid image.');
               target.value = '';
               this.previewImageUrl = '';
             }

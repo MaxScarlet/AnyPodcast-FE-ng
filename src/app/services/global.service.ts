@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { CookieService } from 'ngx-cookie-service';
 import { PodcastService } from './podcast.service';
-import { BehaviorSubject, firstValueFrom } from 'rxjs';
+import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
 import { Podcast } from '../models/Podcast';
 import { Router } from '@angular/router';
+import { UploadConfig } from '../models/Config';
+import { FileMngService } from './file-mng.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,9 +21,7 @@ export class GlobalService {
   private podcastId = new BehaviorSubject<string>('');
   public PodcastID$ = this.podcastId.asObservable();
   public UserID: string = '';
-  public readonly prefixForImage =
-    'https://s3.il-central-1.amazonaws.com/web.il.oxymoron-tech.com/';
-
+  public uploadConfig: UploadConfig = new UploadConfig();
   private _appVar = new BehaviorSubject<string>('initialValue');
   public appVar$ = this._appVar.asObservable();
 
@@ -29,16 +29,21 @@ export class GlobalService {
     private auth: AuthService,
     private cookieService: CookieService,
     private podcastService: PodcastService,
-    private router: Router
+    private router: Router,
+    private fileMngService: FileMngService
   ) {
     console.log('global service constructor');
   }
 
+  defaultPosterName() {
+    return `${this.uploadConfig.BucketPath}/${this.uploadConfig.DefaultPosterName}`;
+  }
+  
   imageURL(fileName: string) {
     if (!fileName) {
-      return `${this.prefixForImage}${this.Podcast.PosterName}`;
+      return `${this.uploadConfig.URLPrefix}${this.Podcast.PosterName}`;
     }
-    return `${this.prefixForImage}${fileName}`;
+    return `${this.uploadConfig.URLPrefix}${fileName}`;
   }
 
   async init() {
@@ -60,7 +65,9 @@ export class GlobalService {
     if (userSub && userSub.sub) {
       this.UserID = userSub.sub.split('|')[1];
 
-      const config = await this.getConfig();
+      this.uploadConfig = await firstValueFrom(this.fileMngService.getConfig());
+      console.log('uploadConfig', this.uploadConfig);
+
       await this.getPodcastID();
       if (!this.Podcast._id) {
         this.router.navigate(['/podcast/create']);
@@ -68,8 +75,11 @@ export class GlobalService {
     }
   }
 
-  // TODO: Make this work
-  private async getConfig() {}
+  //   // TODO: Make this work
+  //   private getConfig(): Observable<UploadConfig> {
+  //     return;
+  //   }
+
   public updateAppVar(newValue: string) {
     this._appVar.next(newValue);
   }

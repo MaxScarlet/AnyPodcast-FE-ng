@@ -23,6 +23,7 @@
 
 .img_logo {
   cursor: pointer;
-  height: 47px;
+  margin-right: 20px;
+  height: 38px;
   float: left;
 }
