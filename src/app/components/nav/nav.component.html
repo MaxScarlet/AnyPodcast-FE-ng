@@ -1,37 +1,20 @@
 <nav class="menu">
-  <div>
-    <img
-      routerLink="/"
-      class="img_logo"
-      src="assets/images/Logo_r_b_tr.png"
-      alt="anyPodcast"
-      title="anyPodcast"
-    />
-    <ng-container *ngIf="isAuthenticated">
-      <div class="menuItem" routerLink="/dashboard" routerLinkActive="active">
-        Dashboard
-      </div>
-      <div
-        class="menuItem"
-        *ngIf="this.globalService.PodcastID"
-        title="{{ this.globalService.PodcastID }}"
-        routerLink="/podcast/{{ this.globalService.PodcastID }}"
-        [routerLinkActiveOptions]="{ exact: true }"
-        routerLinkActive="active"
-      >
-        Podcast Info
-      </div>
-      <div
-        class="menuItem"
-        routerLink="/podcast/{{ this.globalService.PodcastID }}/episode"
-        routerLinkActive="active"
-      >
-        Episodes
-      </div>
-    </ng-container>
-    <div class="menuItem" routerLink="/about" routerLinkActive="active">
-      About
+  <img routerLink="/" class="img_logo" src="assets/images/Logo_r_b_tr.png" alt="anyPodcast" title="anyPodcast" />
+  <ng-container *ngIf="isAuthenticated">
+    <div class="menuItem" routerLink="/dashboard" routerLinkActive="active">
+      Dashboard
     </div>
+    <div class="menuItem" *ngIf="this.globalService.PodcastID" title="{{ this.globalService.PodcastID }}"
+      routerLink="/podcast/{{ this.globalService.PodcastID }}" [routerLinkActiveOptions]="{ exact: true }"
+      routerLinkActive="active">
+      Podcast Info
+    </div>
+    <div class="menuItem" routerLink="/podcast/{{ this.globalService.PodcastID }}/episode" routerLinkActive="active">
+      Episodes
+    </div>
+  </ng-container>
+  <div class="menuItem" routerLink="/about" routerLinkActive="active">
+    About
   </div>
 
   <div class="auth-button-container">
@@ -39,10 +22,5 @@
       <button mat-button (click)="openDialog()">Podcasts</button>
     </ng-container>
     <app-auth-button></app-auth-button>
-    <ng-container *ngIf="isAuthenticated">
-      <div>
-        Hello, <a routerLink="/profile"> {{ user.nickname }}</a>
-      </div>
-    </ng-container>
   </div>
 </nav>

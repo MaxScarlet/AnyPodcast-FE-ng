@@ -1,8 +1,8 @@
 .img_btn {
   cursor: pointer;
   height: 28px;
-  padding: 15px 10px 0px 10px; 
   opacity: 0.6;
+  margin-top: 3px;
 }
 
 .img_btn:hover {

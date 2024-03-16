@@ -1,28 +1,40 @@
 .drag-drop-zone {
-  border: 2px dashed #ccc;
-  padding: 20px;
+  display: flex;
+  /* border: 0.5px dashed gray; */
+  background-color: white;
   text-align: center;
   cursor: pointer;
-  width: 400px;
+  width: 100%;
+  height: 35px;
 }
 
-.drag-drop-zone.drag-over {
-  background-color: #f0f0f0;
-}
+/* .drag-drop-zone.drag-over {
+  background-color: var(--background-color);
+} */
 
 .drag-drop-zone input[type="file"] {
   display: none;
 }
+.drag-drop-zone button {
+  white-space: nowrap;
+  margin-right: 1px;
+}
+
 .progress-bar {
   width: 100%;
-  height: 20px;
-  background-color: #f0f0f0;
-  border-radius: 10px;
+  height: 100%;
+  background-color: var(--bg-color-light);
+  border-radius: 1px;
   overflow: hidden;
+  opacity: 0.5;
+}
+.progress-bar.drag-over {
+  opacity: 0.8;
 }
 
 .progress {
   height: 100%;
   background-color: var(--btn-color);
   transition: width 0.3s ease-in-out;
+  opacity: 0.5;
 }

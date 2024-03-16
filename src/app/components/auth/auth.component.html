@@ -1,10 +1,10 @@
 <ng-container *ngIf="auth.isAuthenticated$ | async; else loggedOut">
-
   <img
     class="img_btn"
     (click)="this.globalService.logout()"
     src="assets/images/logout_icon_32_light.png"
     alt="logout"
+    title="{{ user.nickname }}"
   />
 </ng-container>
 

@@ -1,5 +1,5 @@
 <h1>Episode</h1>
-<form (ngSubmit)="onSubmit()">
+<form (ngSubmit)="onSubmit()" style="width: 70vw;">
   <div class="formElem">
     <label for="Title">Title: </label>
     <input
@@ -10,29 +10,24 @@
       required
     />
   </div>
-  <div>
+  <div class="formElem">
+    <!-- <label for="MediaFile">Media File: </label> -->
     <ng-container *ngIf="formData.MediaFile; else elseBlock">
       <audio controls controlsList="nodownload">
-        <source
-          src="https://s3.il-central-1.amazonaws.com/web.il.oxymoron-tech.com/{{
-            formData.MediaFile
-          }}"
-          type="audio/mpeg"
-        />
+        <source [src]="this.globalService.uploadConfig.URLPrefix + formData.MediaFile" type="audio/mpeg"/>
       </audio>
     </ng-container>
     <ng-template #elseBlock>
-      <app-file-upload
+      <app-file-upload style="width: 100%;"
         [user]="userObj"
         (uploadFileName)="uploadComplete($event)"
         (uploadStarted)="uploadInProgress($event)"
       ></app-file-upload>
     </ng-template>
+    <i *ngIf="formData.MediaFileOriginal">{{formData.MediaFileOriginal}}</i>
   </div>
-
-  <div class="formElem">
+  <div class="formElem vert">
     <label for="Description">Description: </label>
-    <br />
     <textarea
       type="text"
       id="Description"
@@ -42,7 +37,7 @@
     ></textarea>
   </div>
 
-  <app-image-upload
+  <app-image-upload style="width: 100%;"
     [user]="userObj"
     [previewURL]="formData.PosterName"
     (uploadComplete)="imageUploadComplete($event)"
@@ -50,7 +45,7 @@
     (imageChanged)="imageChanged()"
   ></app-image-upload>
 
-  <label for="Publish">Publish: </label>
+  <label for="Publish">Published: </label>
   <app-toggle-slider
     [isChecked]="formData.IsVisible"
     (toggle)="visibleToggle($event)"

@@ -1,58 +1,35 @@
-<div class="list-container">
-  <h1>
-    Episodes
-    <button
-      class="fa fa-plus"
-      style="
-        font-size: medium !important;
-        padding-left: 13px;
-        padding-right: 13px;
-      "
-      title="Add new episode"
-      routerLink="/podcast/{{ this.globalService.PodcastID }}/episode/create"
-    ></button>
-  </h1>
-
+<div class="header">
+  <h1>Episodes</h1>
+  <button class="fa fa-plus" style="
+  font-size: medium !important;
+  padding-left: 13px;
+  padding-right: 13px;
+" title="Add new episode" routerLink="/podcast/{{ this.globalService.PodcastID }}/episode/create"></button>
   <div *ngIf="isLoading" class="loading-spinner">
-    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    <mat-progress-spinner mode="indeterminate" [diameter]="30"></mat-progress-spinner>
   </div>
+</div>
 
-  <div class="episode-list" *ngIf="!isLoading">
-    <ul>
-      <li
-        *ngFor="let episode of episodeList"
-        class="itemWrapper"
-        [class.draftWrapper]="episode.Title.includes('Untitled')"
-      >
-        <img
-          class="posterImage"
-          [src]="globalService.imageURL(episode.PosterName)"
-          alt="episodePoster"
-        />
-        <div class="textWrapper">
-          <b class="episode-title">{{ episode.Title }}</b>
-          <p class="episode-description">{{ episode.Description }}</p>
-          <button
-            class="fa fa-edit"
-            routerLink="/podcast/{{ this.globalService.PodcastID }}/episode/{{
-              episode._id
-            }}"
-          ></button>
-
+<div class="episode-list" *ngIf="!isLoading">
+  <ul>
+    <li *ngFor="let episode of episodeList" [class.draftWrapper]="episode.Title.includes('Untitled')">
+      <img class="posterImage" [src]="globalService.imageURL(episode.PosterName)" alt="episodePoster" />
+      <div class="textWrapper">
+        <b>{{ episode.Title }}</b>
+        <p>{{ episode.Description }}</p>
+        <div>
+          <button class="fa fa-edit" routerLink="/podcast/{{ this.globalService.PodcastID }}/episode/{{episode._id}}"></button>
           <button class="fa fa-remove" (click)="openPrompt(episode)"></button>
         </div>
-        <div class="eyeDateWrapper">
-          <div
-            class="episode-visible fa"
-            [ngClass]="{
+      </div>
+      <div class="eyeDateWrapper">
+        <div class="episode-visible fa" [ngClass]="{
             'fa-eye': episode.IsVisible,
             'fa-eye-slash': !episode.IsVisible,
-          }"
-          ></div>
-          <b *ngIf="episode.Title.includes('Untitled')">Draft</b>
-          <div class="episode-created">{{ episode.Created }}</div>
-        </div>
-      </li>
-    </ul>
-  </div>
+          }"></div>
+        <b *ngIf="episode.Title.includes('Untitled')">Draft</b>
+        <div class="episode-created">{{ episode.Created }}</div>
+      </div>
+    </li>
+  </ul>
 </div>

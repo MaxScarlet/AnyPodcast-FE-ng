@@ -32,7 +32,7 @@ export class EpisodeFormComponent {
   constructor(
     private route: ActivatedRoute,
     private episodeService: EpisodeService,
-    private globalService: GlobalService,
+    public globalService: GlobalService,
     private router: Router,
     private popupService: PopupService
   ) {}

@@ -1,6 +1,7 @@
 .visibleDiv {
   cursor: pointer;
 }
+
 button:disabled {
   background-color: grey;
   cursor: none;
@@ -11,6 +12,7 @@ button:disabled {
   color: var(--btn-color);
   background-color: var(--background-color);
 }
+
 .submitWrapper {
   display: flex; 
   align-items: center; 
@@ -18,4 +20,8 @@ button:disabled {
 
 .submitWrapper button {
   margin-right: 10px; 
+}
+i {
+  font-size: 14px;
+  color: #777;
 }

@@ -1,4 +1,10 @@
-div {
+.imageUpload {
+  width: 100%;
+  display: grid;
+  gap:3px;
+  align-items: start;
+  grid-template-columns: 110px 1fr;
+  justify-content: left;
   margin-bottom: 10px;
 }
 
@@ -20,9 +26,8 @@ p {
 
 #imagePreview {
   width: 100px;
-  border: 1px solid #ccc;
-  padding: 5px;
-  margin-top: 10px;
+  /* border: 1px solid #ccc;
+  padding: 5px; */
 }
 
 #uploadProgress {

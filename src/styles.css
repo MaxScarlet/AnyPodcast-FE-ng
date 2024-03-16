@@ -1,9 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
-
 :root {
   --primary-color: #881719;
   --accent-color: #f08080;
   --background-color: #ededed;
+  --bg-color-light: #d8bfbf;
   --text-color: #333333;
   --border-color: #bfbfbf;
 
@@ -15,21 +14,59 @@
   --menu-color: #2c2d2d;
   --menu-color-active: #881719;
 }
+
+.mainCont {
+  padding: 10px;
+}
+
 h1 {
   color: var(--primary-color);
   font-weight: bolder !important;
 }
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  height: 100%;
+}
+
 .formElem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 5px;
   margin-bottom: 10px;
 }
+
+.vert {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 100%;
+}
+
 .formElem label {
   font-weight: bold;
 }
-.formElem textarea {
-  resize: none;
-  width: 400px;
-  height: 200px;
+
+.formElem input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
+
+.formElem textarea {
+  width: 100%;
+  height: 100px;  
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -43,6 +80,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
 body {
   background-color: var(--background-color);
   margin: 0px;
@@ -93,6 +131,7 @@ button:hover {
 .footer a {
   color: var(--menu-color-active);
 }
+
 .App {
   text-align: center;
 }
@@ -127,16 +166,19 @@ html,
 body {
   height: 100%;
 }
+
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
 .custom-dialog-container mat-dialog-container {
   background-color: #fff;
   border-radius: 8px;
   width: 350px;
 }
-#mat-mdc-dialog-0 > div > div > app-popup > div {
+
+#mat-mdc-dialog-0>div>div>app-popup>div {
   padding: 0px;
 }
 
