@@ -38,8 +38,12 @@ export class GlobalService {
   defaultPosterName() {
     return `${this.uploadConfig.BucketPath}/${this.uploadConfig.DefaultPosterName}`;
   }
-  
+
   imageURL(fileName: string) {
+    console.log(
+      `imageURL: PodcastID ${this.Podcast._id} , PosterName: ${fileName}`
+    );
+
     if (!fileName) {
       return `${this.uploadConfig.URLPrefix}${this.Podcast.PosterName}`;
     }
@@ -75,18 +79,13 @@ export class GlobalService {
     }
   }
 
-  //   // TODO: Make this work
-  //   private getConfig(): Observable<UploadConfig> {
-  //     return;
-  //   }
-
   public updateAppVar(newValue: string) {
     this._appVar.next(newValue);
   }
 
   private async getPodcastID() {
     const cookiePodcastID = this.cookieService.get('podcastID');
-    console.log('Cookie ', cookiePodcastID);
+    console.log('getPodcastID Cookie ', cookiePodcastID);
     if (cookiePodcastID) {
       const response: Podcast = await firstValueFrom(
         this.podcastService.getByID<Podcast>(cookiePodcastID)

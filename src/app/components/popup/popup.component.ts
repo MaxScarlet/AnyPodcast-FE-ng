@@ -26,8 +26,13 @@ export class PopupComponent {
 
   ngOnInit(): void {
     this.podcastService.get<Podcast>(this.userID).subscribe(
-      (response) => {
-        this.podcastList = response;
+      (response: Podcast[]) => {
+        this.podcastList = response.map((item) => {
+          return {
+            ...item,
+            PosterName: this.globalService.imageURL(item.PosterName),
+          };
+        });
       },
       (error) => {
         console.error('Error fetching episodes:', error);

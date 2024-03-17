@@ -1,4 +1,3 @@
-
 import { Component, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -41,11 +40,11 @@ export class EpisodesComponent implements OnDestroy {
     console.log('Episodes Constructor');
     this.subscription = this.globalService.appVar$.subscribe((value) => {
       console.log('appVar$.subscribe');
-      this.ngOnInit();
+      this.init();
     });
   }
 
-  async ngOnInit() {
+  async init() {
     try {
       this.podcastID = this.globalService.PodcastID;
       this.fetchEpisodes();
@@ -59,12 +58,24 @@ export class EpisodesComponent implements OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  //TODO: fix caching issue for images
   fetchEpisodes(): void {
     this.isLoading = true;
+    console.log(this.episodeList);
+
+    this.episodeList = [];
     this.episodeService.get<Episode>(this.podcastID).subscribe(
       (response) => {
+        const copyResponse: Episode[] = [...response];
+        console.log('response', response);
+        console.log('copyResponse', copyResponse[0].PosterName.includes("https://"));
+
         this.episodeList = response;
         this.episodeList.forEach((item) => {
+          console.log('episode', item);
+          item.PosterName = this.globalService.imageURL(item.PosterName);
+          console.log('item.PosterName', item.PosterName);
+
           item.Created = new Date(item.Created).toLocaleString('en-GB', {
             day: 'numeric',
             month: 'short',
@@ -104,10 +115,7 @@ export class EpisodesComponent implements OnDestroy {
         this.http
           .patch<any>(
             `${this.fileMngUrl}`,
-            [
-              { fileName: episode.PosterName },
-              { fileName: episode.MediaFile },
-            ],
+            [{ fileName: episode.PosterName }, { fileName: episode.MediaFile }],
             {
               headers: this.headers,
             }

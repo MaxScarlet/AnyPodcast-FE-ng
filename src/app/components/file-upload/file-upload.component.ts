@@ -1,13 +1,13 @@
 import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpHeaders,
+    HttpClient,
+    HttpErrorResponse,
+    HttpHeaders,
 } from '@angular/common/http';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Upload } from 'src/app/models/Upload';
 import { User } from 'src/app/models/User';
-import { environment } from 'src/environment';
+import { FileMngService } from 'src/app/services/file-mng.service';
 
 @Component({
   selector: 'app-file-upload',
@@ -21,8 +21,10 @@ export class FileUploadComponent {
 
   selectedFile: File | null = null;
   uploadProgress: number = 0;
-  private baseUrl = `${environment.fileMngUrl}/upload`;
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private fileMngService: FileMngService
+  ) {}
 
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',
@@ -74,15 +76,10 @@ export class FileUploadComponent {
       Size: this.selectedFile.size,
     };
 
-    const options = {
-      headers: this.headers,
-      reportProgress: true,
-    };
-
-    this.http.post<any>(`${this.baseUrl}/init`, upload, options).subscribe(
+    this.fileMngService.init(upload).subscribe(
       (upload: Upload) => {
         console.log('Response(init): ', upload);
-        upload = upload; 
+        upload = upload;
 
         let uploadedPartsCnt = 0;
         const uploadedParts: any[] = [];
@@ -91,9 +88,8 @@ export class FileUploadComponent {
           const start = (partNumber - 1) * partSize;
           const end = Math.min(partNumber * partSize, this.selectedFile!.size);
           const filePart = this.selectedFile!.slice(start, end);
-          const part = upload.Parts![partNumber - 1]; 
+          const part = upload.Parts![partNumber - 1];
 
-          
           this.http
             .put(part.PresignedUrl, filePart, {
               observe: 'response',
@@ -114,14 +110,8 @@ export class FileUploadComponent {
                   uploadedParts.push({ PartNumber: partNumber, ETag: eTag });
 
                   if (uploadedPartsCnt === totalParts) {
-                    const completePayload = {
-                      UploadId: upload.UploadId,
-                      Parts: uploadedParts,
-                    };
-                    this.http
-                      .post<any>(`${this.baseUrl}/complete`, completePayload, {
-                        headers: this.headers,
-                      })
+                    this.fileMngService
+                      .complete(upload, uploadedParts)
                       .subscribe(
                         (completeResponse) => {
                           console.log(
@@ -148,7 +138,6 @@ export class FileUploadComponent {
                 console.error('Error uploading part to S3', error);
               }
             );
-
         }
       },
       (error: HttpErrorResponse) => {

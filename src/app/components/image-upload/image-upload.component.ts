@@ -9,6 +9,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { Upload } from 'src/app/models/Upload';
 import { User } from 'src/app/models/User';
+import { FileMngService } from 'src/app/services/file-mng.service';
 import { GlobalService } from 'src/app/services/global.service';
 import { environment } from 'src/environment';
 
@@ -26,10 +27,14 @@ export class ImageUploadComponent {
 
   selectedFile: File | null = null;
   uploadProgress: number | undefined;
-  private baseUrl = `${environment.fileMngUrl}/upload`;
+  //   private baseUrl = `${environment.fileMngUrl}/upload`;
   public previewImageUrl: string = '';
 
-  constructor(private http: HttpClient, private globalService: GlobalService) {}
+  constructor(
+    private http: HttpClient,
+    private globalService: GlobalService,
+    private fileMngService: FileMngService
+  ) {}
 
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',
@@ -91,12 +96,7 @@ export class ImageUploadComponent {
         Size: this.selectedFile.size,
       };
 
-      const options = {
-        headers: this.headers,
-        reportProgress: true,
-      };
-
-      this.http.post<any>(`${this.baseUrl}`, upload, options).subscribe(
+      this.fileMngService.upload(upload).subscribe(
         (uploadResp: Upload) => this.apiHandlerUpload(uploadResp),
         (error: HttpErrorResponse) => {
           console.error('Error initiating multipart upload', error);
@@ -118,7 +118,9 @@ export class ImageUploadComponent {
       this.http
         .put(presignedUrl, modifiedFile, {
           observe: 'events',
-          headers: this.headers,
+          headers: new HttpHeaders({
+            'Content-Type': `${modifiedFile.type}`,
+          }),
           reportProgress: true,
         })
         .subscribe(

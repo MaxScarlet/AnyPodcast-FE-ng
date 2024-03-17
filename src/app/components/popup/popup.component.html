@@ -17,7 +17,7 @@
       (click)="handleLIClick(podcast._id)"
       [ngClass]="{ selected: podcast._id === this.globalService.PodcastID }"
     >
-      <img src="{{ this.globalService.imageURL(podcast.PosterName) }}" alt="" />
+      <img src="{{ podcast.PosterName }}" alt="" />
       <b>{{ podcast.Title }}</b>
     </li>
   </ul>
