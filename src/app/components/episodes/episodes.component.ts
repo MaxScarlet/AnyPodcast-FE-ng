@@ -1,19 +1,20 @@
-import { Component, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { GlobalService } from 'src/app/services/global.service';
-import { PopupService } from 'src/app/services/popup.service';
-import { EpisodeService } from '../../services/episode.service';
-import { Episode } from 'src/app/models/Episode';
 import {
   HttpClient,
   HttpErrorResponse,
   HttpHeaders,
 } from '@angular/common/http';
+import { Component, OnDestroy } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
+import { Episode } from 'src/app/models/Episode';
+import { LogRec } from 'src/app/models/LogRec';
 import { Upload } from 'src/app/models/Upload';
+import { GlobalService } from 'src/app/services/global.service';
+import { LoggerService } from 'src/app/services/logger.service';
+import { PopupService } from 'src/app/services/popup.service';
 import { environment } from 'src/environment';
-
+import { EpisodeService } from '../../services/episode.service';
 @Component({
   selector: 'app-episodes',
   templateUrl: './episodes.component.html',
@@ -35,11 +36,11 @@ export class EpisodesComponent implements OnDestroy {
     private popupService: PopupService,
     private router: Router,
     private route: ActivatedRoute,
-    private http: HttpClient
+    private http: HttpClient,
+    private logger: LoggerService
   ) {
-    console.log('Episodes Constructor');
     this.subscription = this.globalService.appVar$.subscribe((value) => {
-      console.log('appVar$.subscribe');
+      this.globalService.logWriter('appVar$.subscribe', null);
       this.init();
     });
   }
@@ -49,42 +50,41 @@ export class EpisodesComponent implements OnDestroy {
       this.podcastID = this.globalService.PodcastID;
       this.fetchEpisodes();
     } catch (err) {
-      console.error();
+      this.logger.create('error', err);
     }
   }
 
   ngOnDestroy() {
-    console.log('ngOnDestroy');
+    this.globalService.logWriter('ngOnDestroy', null);
     this.subscription.unsubscribe();
   }
 
   //TODO: fix caching issue for images
   fetchEpisodes(): void {
     this.isLoading = true;
-    console.log(this.episodeList);
-
     this.episodeList = [];
     this.episodeService.get<Episode>(this.podcastID).subscribe(
       (response) => {
-        const copyResponse: Episode[] = [...response];
-        console.log('response', response);
-        console.log('copyResponse', copyResponse[0].PosterName.includes("https://"));
-
+        this.globalService.logWriter('response', response);
         this.episodeList = response;
-        this.episodeList.forEach((item) => {
-          console.log('episode', item);
+        for (let i = 0; i < this.episodeList.length; i++) {
+          const item = this.episodeList[i];
           item.PosterName = this.globalService.imageURL(item.PosterName);
-          console.log('item.PosterName', item.PosterName);
+          this.globalService.logWriter('item', i);
 
-          item.Created = new Date(item.Created).toLocaleString('en-GB', {
+          const createdDate = new Date(item.Created);
+          const formattedDate = createdDate.toLocaleString('en-GB', {
             day: 'numeric',
             month: 'short',
             year: '2-digit',
             hour: 'numeric',
             minute: 'numeric',
           });
-        });
+
+          item.Created = formattedDate;
+        }
         this.episodeList.reverse();
+        this.globalService.logWriter('response', response);
         this.isLoading = false;
       },
       (error) => {
@@ -122,7 +122,7 @@ export class EpisodesComponent implements OnDestroy {
           )
           .subscribe(
             (resp: Upload) => {
-              console.log('Deleted Episode', resp);
+              this.globalService.logWriter('Deleted Episode', resp);
             },
             (error: HttpErrorResponse) => {
               console.error('Error initiating multipart upload', error);

@@ -48,8 +48,8 @@ export class ImageUploadComponent {
   }
 
   onFileSelected(event: any): void {
-    console.log('user', this.user);
-    console.log(this.selectedFile);
+    this.globalService.logWriter('user', this.user);
+    this.globalService.logWriter('selectedFile', this.selectedFile);
   }
 
   handleFileInputChange(event: Event) {
@@ -82,7 +82,7 @@ export class ImageUploadComponent {
   }
 
   onUploadInit(): void {
-    console.log('user', this.user);
+    this.globalService.logWriter('user', this.user);
 
     if (!this.selectedFile) {
       console.warn('No file selected');
@@ -106,14 +106,14 @@ export class ImageUploadComponent {
   }
 
   private apiHandlerUpload(uploadResp: Upload) {
-    console.log('Response(upload) POST: ', uploadResp);
+    this.globalService.logWriter('Response(upload) POST: ', uploadResp);
     if (uploadResp && uploadResp.Parts) {
       const presignedUrl = uploadResp.Parts[0].PresignedUrl;
 
       const modifiedFile = new File([this.selectedFile!], uploadResp.FileName, {
         type: this.selectedFile!.type,
       });
-      console.log('Modified file: ', modifiedFile);
+      this.globalService.logWriter('Modified file: ', modifiedFile);
 
       this.http
         .put(presignedUrl, modifiedFile, {
@@ -133,13 +133,13 @@ export class ImageUploadComponent {
   }
 
   private presignedURLHandler(event: any, uploadResp: Upload) {
-    console.log('Presigned URL');
+    this.globalService.logWriter('Presigned URL' , null);
 
     if (event.type === HttpEventType.UploadProgress) {
       this.uploadProgress = Math.round((100 * event.loaded) / event.total!);
     } else if (event instanceof HttpResponse) {
       this.uploadProgress = undefined;
-      console.log('completed successfully', uploadResp);
+      this.globalService.logWriter('completed successfully', uploadResp);
       this.uploadComplete.emit(uploadResp.FileName);
     }
   }

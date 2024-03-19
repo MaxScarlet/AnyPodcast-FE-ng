@@ -6,8 +6,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatSliderModule } from '@angular/material/slider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSliderModule } from '@angular/material/slider';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from 'src/environment';
@@ -20,17 +20,18 @@ import { EpisodesComponent } from './components/episodes/episodes.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HomeComponent } from './components/home/home.component';
+import { ImageUploadComponent } from './components/image-upload/image-upload.component';
 import { NavComponent } from './components/nav/nav.component';
 import { PodcastInfoComponent } from './components/podcast-info/podcast-info.component';
 import { PopupMsgComponent } from './components/popup-msg/popup-msg.component';
 import { PopupComponent } from './components/popup/popup.component';
 import { UserProfileComponent } from './components/profile/profile.component';
+import { ToggleSliderComponent } from './components/toggle-slider/toggle-slider.component';
 import { EpisodeService } from './services/episode.service';
 import { GlobalService } from './services/global.service';
+import { LoggerService } from './services/logger.service';
 import { PodcastService } from './services/podcast.service';
 import { PopupService } from './services/popup.service';
-import { ToggleSliderComponent } from './components/toggle-slider/toggle-slider.component';
-import { ImageUploadComponent } from './components/image-upload/image-upload.component';
 
 export function initializeGlobalService(
   globalService: GlobalService
@@ -86,6 +87,7 @@ export function initializeGlobalService(
     },
     GlobalService,
     PopupService,
+    LoggerService,
   ],
   bootstrap: [AppComponent],
 })

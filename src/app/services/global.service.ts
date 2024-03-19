@@ -7,6 +7,8 @@ import { Podcast } from '../models/Podcast';
 import { Router } from '@angular/router';
 import { UploadConfig } from '../models/Config';
 import { FileMngService } from './file-mng.service';
+import { LoggerService } from './logger.service';
+import { LogRec } from '../models/LogRec';
 
 @Injectable({
   providedIn: 'root',
@@ -30,9 +32,10 @@ export class GlobalService {
     private cookieService: CookieService,
     private podcastService: PodcastService,
     private router: Router,
-    private fileMngService: FileMngService
+    private fileMngService: FileMngService,
+    private logger: LoggerService
   ) {
-    console.log('global service constructor');
+    this.logWriter('global service constructor', null);
   }
 
   defaultPosterName() {
@@ -40,8 +43,9 @@ export class GlobalService {
   }
 
   imageURL(fileName: string) {
-    console.log(
-      `imageURL: PodcastID ${this.Podcast._id} , PosterName: ${fileName}`
+    this.logWriter(
+      'imageURL',
+      `PodcastID ${this.Podcast._id} , PosterName: ${fileName}`
     );
 
     if (!fileName) {
@@ -51,7 +55,7 @@ export class GlobalService {
   }
 
   async init() {
-    console.log('global service init');
+    this.logWriter('global service init', null);
     await this.getUserID();
   }
 
@@ -61,16 +65,16 @@ export class GlobalService {
   }
 
   private async getUserID() {
-    console.log('get user ID');
+    this.logWriter('get user ID', null);
 
     const userSub = await firstValueFrom(this.auth.user$);
-    console.log('userSub: ', userSub);
+    this.logWriter('userSub: ', userSub);
 
     if (userSub && userSub.sub) {
       this.UserID = userSub.sub.split('|')[1];
 
       this.uploadConfig = await firstValueFrom(this.fileMngService.getConfig());
-      console.log('uploadConfig', this.uploadConfig);
+      this.logWriter('uploadConfig', this.uploadConfig);
 
       await this.getPodcastID();
       if (!this.Podcast._id) {
@@ -79,28 +83,54 @@ export class GlobalService {
     }
   }
 
+  public async logWriter(msg: string, val: any): Promise<void> {
+    // console.log(msg, val);
+    // localStorage.setItem(`${this.timeStamp()} | ${msg}`, JSON.stringify(val));
+    const resp = await firstValueFrom(this.logger.create<LogRec>(msg, val));
+  }
+
+  private timeStamp(): string {
+    const currentTime = new Date();
+    const hours = currentTime.getHours();
+    const minutes = currentTime.getMinutes();
+    const seconds = currentTime.getSeconds();
+    const milliseconds = currentTime.getMilliseconds();
+
+    // Format the time to display leading zeros if necessary
+    const formattedTime = `${hours < 10 ? '0' + hours : hours}:${
+      minutes < 10 ? '0' + minutes : minutes
+    }:${seconds < 10 ? '0' + seconds : seconds}.${
+      milliseconds < 10
+        ? '00' + milliseconds
+        : milliseconds < 100
+        ? '0' + milliseconds
+        : milliseconds
+    }`;
+
+    return formattedTime;
+  }
   public updateAppVar(newValue: string) {
     this._appVar.next(newValue);
   }
 
   private async getPodcastID() {
     const cookiePodcastID = this.cookieService.get('podcastID');
-    console.log('getPodcastID Cookie ', cookiePodcastID);
+    this.logWriter('getPodcastID Cookie ', cookiePodcastID);
     if (cookiePodcastID) {
       const response: Podcast = await firstValueFrom(
         this.podcastService.getByID<Podcast>(cookiePodcastID)
       );
       this.Podcast = response;
-      console.log('cookie response', response);
+      this.logWriter('cookie response', response);
     } else if (this.UserID) {
-      console.log('else if getPodcastID');
+      this.logWriter('else if getPodcastID', null);
 
       try {
         const response: Podcast[] = await firstValueFrom(
           this.podcastService.get<Podcast>(this.UserID)
         );
 
-        console.log('service getPodcastID');
+        this.logWriter('service getPodcastID', null);
 
         if (response && response[0]) {
           this.Podcast = response[0];
