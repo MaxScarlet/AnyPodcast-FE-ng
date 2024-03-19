@@ -9,6 +9,7 @@ AnyPodcast-FE-ng is the frontend repository of the AnyPodcast project, a web app
 - _Podcasts_: https://github.com/MaxScarlet/AnyPodcast-BE-podcasts
 - _Episodes_: https://github.com/MaxScarlet/AnyPodcast-BE-episodes
 - _File-mng_: https://github.com/MaxScarlet/AnyPodcast-BE-file-mng
+- _Logger_: https://github.com/MaxScarlet/AnyPodcast-BE-logger
 
 ## Features
 
