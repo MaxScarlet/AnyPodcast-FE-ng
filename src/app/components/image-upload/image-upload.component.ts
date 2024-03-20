@@ -133,7 +133,7 @@ export class ImageUploadComponent {
   }
 
   private presignedURLHandler(event: any, uploadResp: Upload) {
-    this.globalService.logWriter('Presigned URL' , null);
+    this.globalService.logWriter('Presigned URL');
 
     if (event.type === HttpEventType.UploadProgress) {
       this.uploadProgress = Math.round((100 * event.loaded) / event.total!);

@@ -35,7 +35,8 @@ export class GlobalService {
     private fileMngService: FileMngService,
     private logger: LoggerService
   ) {
-    this.logWriter('global service constructor', null);
+    this.logWriter('=== start ===', "=== start ===");
+    this.logWriter('global service constructor');
   }
 
   defaultPosterName() {
@@ -55,7 +56,7 @@ export class GlobalService {
   }
 
   async init() {
-    this.logWriter('global service init', null);
+    this.logWriter('global service init');
     await this.getUserID();
   }
 
@@ -65,7 +66,7 @@ export class GlobalService {
   }
 
   private async getUserID() {
-    this.logWriter('get user ID', null);
+    this.logWriter('get user ID');
 
     const userSub = await firstValueFrom(this.auth.user$);
     this.logWriter('userSub: ', userSub);
@@ -83,7 +84,7 @@ export class GlobalService {
     }
   }
 
-  public async logWriter(msg: string, val: any): Promise<void> {
+  public async logWriter(msg: string, val?: any): Promise<void> {
     // console.log(msg, val);
     // localStorage.setItem(`${this.timeStamp()} | ${msg}`, JSON.stringify(val));
     const resp = await firstValueFrom(this.logger.create<LogRec>(msg, val));
@@ -123,14 +124,14 @@ export class GlobalService {
       this.Podcast = response;
       this.logWriter('cookie response', response);
     } else if (this.UserID) {
-      this.logWriter('else if getPodcastID', null);
+      this.logWriter('else if getPodcastID');
 
       try {
         const response: Podcast[] = await firstValueFrom(
           this.podcastService.get<Podcast>(this.UserID)
         );
 
-        this.logWriter('service getPodcastID', null);
+        this.logWriter('service getPodcastID');
 
         if (response && response[0]) {
           this.Podcast = response[0];

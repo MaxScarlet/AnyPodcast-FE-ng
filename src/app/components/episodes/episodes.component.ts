@@ -40,7 +40,7 @@ export class EpisodesComponent implements OnDestroy {
     private logger: LoggerService
   ) {
     this.subscription = this.globalService.appVar$.subscribe((value) => {
-      this.globalService.logWriter('appVar$.subscribe', null);
+      this.globalService.logWriter('appVar$.subscribe');
       this.init();
     });
   }
@@ -55,7 +55,7 @@ export class EpisodesComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.globalService.logWriter('ngOnDestroy', null);
+    this.globalService.logWriter('ngOnDestroy');
     this.subscription.unsubscribe();
   }
 

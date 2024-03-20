@@ -8,10 +8,10 @@ import { GlobalService } from './services/global.service';
 })
 export class AppComponent {
   title = 'rewrite-any-podcast';
-  constructor() {
-    console.log('app-component');
+  constructor(private globalService: GlobalService) {
+    this.globalService.logWriter('app-component');
   }
   async ngOnInit() {
-    console.log('ngOnInit app component');
+    this.globalService.logWriter('ngOnInit app component');
   }
 }
