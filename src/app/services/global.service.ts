@@ -20,8 +20,6 @@ export class GlobalService {
     return this.Podcast._id;
   }
 
-  private podcastId = new BehaviorSubject<string>('');
-  public PodcastID$ = this.podcastId.asObservable();
   public UserID: string = '';
   public uploadConfig: UploadConfig = new UploadConfig();
   private _appVar = new BehaviorSubject<string>('initialValue');
@@ -44,10 +42,7 @@ export class GlobalService {
   }
 
   imageURL(fileName: string) {
-    this.logWriter(
-      'imageURL',
-      `PodcastID ${this.Podcast._id} , PosterName: ${fileName}`
-    );
+    this.logWriter('imageURL',`PodcastID ${this.Podcast._id} , PosterName: ${fileName}`);
 
     if (!fileName) {
       return `${this.uploadConfig.URLPrefix}${this.Podcast.PosterName}`;
@@ -77,7 +72,7 @@ export class GlobalService {
       this.uploadConfig = await firstValueFrom(this.fileMngService.getConfig());
       this.logWriter('uploadConfig', this.uploadConfig);
 
-      await this.getPodcastID();
+      await this.getPodcast();
       if (!this.Podcast._id) {
         this.router.navigate(['/podcast/create']);
       }
@@ -114,27 +109,26 @@ export class GlobalService {
     this._appVar.next(newValue);
   }
 
-  private async getPodcastID() {
+  private async getPodcast() {
     const cookiePodcastID = this.cookieService.get('podcastID');
-    this.logWriter('getPodcastID Cookie ', cookiePodcastID);
+    this.logWriter('Global: getPodcast Cookie', cookiePodcastID);
     if (cookiePodcastID) {
       const response: Podcast = await firstValueFrom(
         this.podcastService.getByID<Podcast>(cookiePodcastID)
       );
       this.Podcast = response;
-      this.logWriter('cookie response', response);
+      this.logWriter('Global: cookie response', response);
     } else if (this.UserID) {
-      this.logWriter('else if getPodcastID');
+      this.logWriter('else if Global: getPodcast');
 
       try {
         const response: Podcast[] = await firstValueFrom(
           this.podcastService.get<Podcast>(this.UserID)
         );
 
-        this.logWriter('service getPodcastID');
-
         if (response && response[0]) {
           this.Podcast = response[0];
+          this.logWriter('Global: getPodcast', this.Podcast);
           this.cookieService.set('podcastID', response[0]._id, { path: '/' });
         } else {
           console.warn('Podcasts not found');

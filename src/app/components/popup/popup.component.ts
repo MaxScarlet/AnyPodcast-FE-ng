@@ -13,6 +13,7 @@ import { PodcastService } from 'src/app/services/podcast.service';
 })
 export class PopupComponent {
   public podcastList: Podcast[] = [];
+  public podcasts: Podcast[] = [];
   private userID: string = this.globalService.UserID;
 
   constructor(
@@ -27,6 +28,7 @@ export class PopupComponent {
   ngOnInit(): void {
     this.podcastService.get<Podcast>(this.userID).subscribe(
       (response: Podcast[]) => {
+        this.podcasts = response;
         this.podcastList = response.map((item) => {
           return {
             ...item,
@@ -44,11 +46,13 @@ export class PopupComponent {
   }
 
   handleLIClick(_id: string): void {
-    this.globalService.Podcast._id = _id;
+    const podcast = this.podcasts.find((podcast) => podcast._id === _id);
+    this.globalService.Podcast = podcast!;
+    // this.globalService.Podcast._id = _id;
+    this.globalService.updateAppVar('trigger'); // this.globalService.PodcastID
     this.cookieService.set('podcastID', this.globalService.PodcastID, {
       path: '/',
     });
-    this.globalService.updateAppVar(this.globalService.PodcastID);
     this.router.navigate([`/podcast/${this.globalService.PodcastID}/episode`]);
     this.closeDialog();
   }
