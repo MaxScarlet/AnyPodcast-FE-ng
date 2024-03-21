@@ -10,8 +10,8 @@
       required
     />
   </div>
+
   <div class="formElem">
-    <!-- <label for="MediaFile">Media File: </label> -->
     <ng-container *ngIf="formData.MediaFile; else elseBlock">
       <audio controls controlsList="nodownload">
         <source [src]="this.globalService.uploadConfig.URLPrefix + formData.MediaFile" type="audio/mpeg"/>
@@ -26,6 +26,7 @@
     </ng-template>
     <i *ngIf="formData.MediaFileOriginal">{{formData.MediaFileOriginal}}</i>
   </div>
+  
   <div class="formElem vert">
     <label for="Description">Description: </label>
     <textarea

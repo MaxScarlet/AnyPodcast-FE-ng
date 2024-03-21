@@ -7,20 +7,8 @@ button:disabled {
   cursor: none;
 }
 
-.msgText {
-  width: fit-content;
-  color: var(--btn-color);
-  background-color: var(--background-color);
-}
 
-.submitWrapper {
-  display: flex; 
-  align-items: center; 
-}
 
-.submitWrapper button {
-  margin-right: 10px; 
-}
 i {
   font-size: 14px;
   color: #777;

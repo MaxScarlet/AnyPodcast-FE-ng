@@ -1,1 +1,10 @@
-<h1>dashboard works!</h1>
+<div class="container">
+  <h1>Podcast Dashboard</h1>
+  <div *ngFor="let podcast of podcastList" class="podcast-card">
+    <img class="posterImage" src="{{ podcast.PosterName }}" alt="" />
+    <div class="podcastDetails">
+      <h3>{{ podcast.Title }}</h3>
+      <p>Total Episodes: {{ podcast.EpisodeCount }}</p>
+    </div>
+  </div>
+</div>

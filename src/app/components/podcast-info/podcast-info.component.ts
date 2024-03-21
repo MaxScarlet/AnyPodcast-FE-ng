@@ -25,11 +25,12 @@ export class PodcastInfoComponent {
   @ViewChild(ImageUploadComponent) imageUploadComponent!: ImageUploadComponent;
 
   userObj: User = new User();
+  msgText: string = '';
 
   public formData: Podcast = new Podcast();
 
   //TODO: Add notification if you leave the page without uploading/submitting
-  
+
   ngOnInit(): void {
     this.route.params.subscribe((params: any) => {
       this.userObj.UserId = this.globalService.UserID;
@@ -48,6 +49,11 @@ export class PodcastInfoComponent {
     });
   }
 
+  visibleToggle(isChecked: boolean): void {
+    this.formData.IsVisible = isChecked;
+    console.log(isChecked);
+  }
+
   imageUploadStart() {
     console.log('imageUploadStart');
   }
@@ -58,6 +64,7 @@ export class PodcastInfoComponent {
     }
     console.log('imageUploadComplete', fileName);
     this.updatePodcast();
+    this.msgText = "Image Upload Complete"
   }
 
   getPodcast() {

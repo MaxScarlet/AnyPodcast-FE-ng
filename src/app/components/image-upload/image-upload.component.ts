@@ -95,7 +95,8 @@ export class ImageUploadComponent {
         User: this.user,
         Size: this.selectedFile.size,
       };
-
+      console.log("Upload", upload);
+      
       this.fileMngService.upload(upload).subscribe(
         (uploadResp: Upload) => this.apiHandlerUpload(uploadResp),
         (error: HttpErrorResponse) => {

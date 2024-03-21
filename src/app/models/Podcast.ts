@@ -6,4 +6,5 @@ export class Podcast {
   Title: string = '';
   Description: string = '';
   PosterName: string = '';
+  EpisodeCount: number = 0;
 }

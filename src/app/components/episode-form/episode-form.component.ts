@@ -73,11 +73,11 @@ export class EpisodeFormComponent {
   //TODO: trigger a notification when user hasn't uploaded yet
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any) {
-    // if (this.isUploadInProgress) {
-    $event.returnValue = true;
-    alert('HostListener');
-    this.msgText = 'Changes aren`t submitted';
-    // }
+    if (this.isUploadInProgress) {
+      $event.returnValue = true;
+      alert('HostListener');
+      this.msgText = 'Changes aren`t submitted';
+    }
   }
 
   uploadInProgress(fileNameOriginal: string): void {

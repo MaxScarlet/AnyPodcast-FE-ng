@@ -65,12 +65,10 @@ export class EpisodesComponent implements OnDestroy {
     this.episodeList = [];
     this.episodeService.get<Episode>(this.podcastID).subscribe(
       (response) => {
-        this.globalService.logWriter('fetchEpisodes: response', response);
         this.episodeList = response;
         for (let i = 0; i < this.episodeList.length; i++) {
           const item = this.episodeList[i];
           item.PosterName = this.globalService.imageURL(item.PosterName);
-          this.globalService.logWriter('item.PosterName', item.PosterName);
 
           const createdDate = new Date(item.Created);
           const formattedDate = createdDate.toLocaleString('en-GB', {
@@ -84,7 +82,6 @@ export class EpisodesComponent implements OnDestroy {
           item.Created = formattedDate;
         }
         this.episodeList.reverse();
-        this.globalService.logWriter('fetchEpisodes: response changed', response);
         this.isLoading = false;
       },
       (error) => {

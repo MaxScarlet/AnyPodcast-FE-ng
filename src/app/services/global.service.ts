@@ -42,8 +42,6 @@ export class GlobalService {
   }
 
   imageURL(fileName: string) {
-    this.logWriter('imageURL',`PodcastID ${this.Podcast._id} , PosterName: ${fileName}`);
-
     if (!fileName) {
       return `${this.uploadConfig.URLPrefix}${this.Podcast.PosterName}`;
     }
@@ -80,9 +78,9 @@ export class GlobalService {
   }
 
   public async logWriter(msg: string, val?: any): Promise<void> {
-    // console.log(msg, val);
+    console.log(msg, val);
     // localStorage.setItem(`${this.timeStamp()} | ${msg}`, JSON.stringify(val));
-    const resp = await firstValueFrom(this.logger.create<LogRec>(msg, val));
+    // const resp = await firstValueFrom(this.logger.create<LogRec>(msg, val));
   }
 
   private timeStamp(): string {

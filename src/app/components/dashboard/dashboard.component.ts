@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Podcast } from 'src/app/models/Podcast';
 import { GlobalService } from 'src/app/services/global.service';
 import { PodcastService } from 'src/app/services/podcast.service';
 import { PopupService } from 'src/app/services/popup.service';
@@ -14,8 +15,7 @@ export class DashboardComponent {
 
   constructor(
     private podcastService: PodcastService,
-    private globalService: GlobalService,
-    private popupService: PopupService
+    private globalService: GlobalService
   ) {}
 
   ngOnInit(): void {
@@ -24,10 +24,12 @@ export class DashboardComponent {
   }
 
   fetchPodcasts(): void {
-    this.podcastService.get<any>(this.userID).subscribe(
+    this.podcastService.get<Podcast>(this.userID).subscribe(
       (response) => {
         this.podcastList = response;
-        this.podcastList.forEach((item) => {
+        this.podcastList.forEach((item: Podcast) => {
+          item.EpisodeCount = Math.floor(Math.random() * 10);
+          item.PosterName = this.globalService.imageURL(item.PosterName);
           item.Created = new Date(item.Created).toLocaleString('en-GB', {
             day: 'numeric',
             month: 'short',
@@ -40,30 +42,6 @@ export class DashboardComponent {
       },
       (error) => {
         console.error('Error fetching episodes:', error);
-      }
-    );
-  }
-  openPrompt(podcast: any) {
-    this.popupService
-      .openPopup({
-        title: 'Delete Episode',
-        message: `Are you sure you want to delete "${podcast.Title}"`,
-        confirmButtonText: 'Confirm',
-        cancelButtonText: 'Cancel',
-      })
-      .subscribe((result) => {
-        if (result) {
-          this.deleteEpisode(podcast._id);
-        }
-      });
-  }
-  deleteEpisode(id: string): void {
-    this.podcastService.delete(id).subscribe(
-      (response) => {
-        this.fetchPodcasts();
-      },
-      (error) => {
-        console.error('Failed to delete podcast', error);
       }
     );
   }

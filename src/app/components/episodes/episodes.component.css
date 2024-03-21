@@ -51,9 +51,6 @@ li {
   border: 1.8px dashed var(--btn-color);
 }
 
-.posterImage {
-  width: 100px;
-}
 
 .eyeDateWrapper {
   height: 100%;

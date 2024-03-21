@@ -1,5 +1,5 @@
 <h1>Podcast</h1>
-<form (ngSubmit)="onSubmit()">
+<form (ngSubmit)="onSubmit()" style="width: 70vw">
   <div class="formElem">
     <label for="Title">Title: </label>
     <input
@@ -11,17 +11,8 @@
     />
   </div>
 
-  <app-image-upload
-    [user]="userObj"
-    [previewURL]="formData.PosterName"
-    (uploadComplete)="imageUploadComplete($event)"
-    (uploadStarted)="imageUploadStart()"
-  >
-  </app-image-upload>
-
-  <div class="formElem">
+  <div class="formElem vert">
     <label for="Description">Description: </label>
-    <br />
     <textarea
       type="text"
       id="Description"
@@ -30,5 +21,23 @@
       required
     ></textarea>
   </div>
-  <button type="submit">Submit</button>
+
+  <app-image-upload
+    style="width: 100%"
+    [user]="userObj"
+    [previewURL]="formData.PosterName"
+    (uploadComplete)="imageUploadComplete($event)"
+    (uploadStarted)="imageUploadStart()"
+  >
+  </app-image-upload>
+  <label for="Publish">Published: </label>
+  <app-toggle-slider
+    [isChecked]="formData.IsVisible"
+    (toggle)="visibleToggle($event)"
+  ></app-toggle-slider>
+  <br />
+  <div class="submitWrapper">
+    <button type="submit">Submit</button>
+    <div class="msgText" *ngIf="msgText">{{ msgText }}</div>
+  </div>
 </form>

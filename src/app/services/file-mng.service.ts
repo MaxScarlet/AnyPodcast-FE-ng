@@ -45,7 +45,7 @@ export class FileMngService {
   }
   
   upload(upload: Upload): Observable<Upload> {
-    const response = this.http.post(`${this.mainUrl}/upload`, upload, {
+    const response = this.http.post(`${this.mainUrl}`, upload, {
       headers: this.headers,
     }) as Observable<Upload>;
     return response;
