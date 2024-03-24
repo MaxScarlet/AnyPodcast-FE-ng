@@ -7,7 +7,7 @@ export const environment = {
   fileMngUrl: 'http://localhost:4063',
   loggerUrl: 'http://localhost:4064',
   logLevel: LogLevel.DEBUG,
-  logTarget: LogTarget.SERVICE,
+  logTarget: LogTarget.CONSOLE,
   //   feedMngUrl: 'http://localhost:4064',
 
   auth0: {

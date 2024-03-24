@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AuthModule } from '@auth0/auth0-angular';
 import { AppRoutingModule } from './app-routing.module';
 
+import { DatePipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -88,6 +89,7 @@ export function initializeGlobalService(
     GlobalService,
     PopupService,
     LoggerService,
+    DatePipe,
   ],
   bootstrap: [AppComponent],
 })

@@ -11,10 +11,11 @@ import { EpisodeService } from 'src/app/services/episode.service';
 import { GlobalService } from 'src/app/services/global.service';
 import { PodcastService } from 'src/app/services/podcast.service';
 import { PopupService } from 'src/app/services/popup.service';
-import { Location } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { User } from 'src/app/models/User';
 import { ImageUploadComponent } from '../image-upload/image-upload.component';
 import { Episode } from 'src/app/models/Episode';
+import { LogLevel } from 'src/app/models/LogLevel';
 
 @Component({
   selector: 'app-episode-form',
@@ -29,90 +30,162 @@ export class EpisodeFormComponent {
   toggleText: string = 'Unpublished';
   public isLoading: boolean = false;
   msgText: string = '';
+  readonly unsavedMsgText: string = 'Unsaved data';
+  isImageChanged: boolean = false;
+  scheduledDate!: Date | null | string;
+  scheduledTime!: null | string;
+  public minDate = this.datePipe.transform(Date.now(), 'yyyy-MM-dd');
+  private interval: number = 30;
+  times: string[] = [];
+  selectedTime: string = '00:00';
+
   constructor(
     private route: ActivatedRoute,
     private episodeService: EpisodeService,
     public globalService: GlobalService,
     private router: Router,
-    private popupService: PopupService
-  ) {}
+    private popupService: PopupService,
+    private datePipe: DatePipe
+  ) {
+    for (let hour = 0; hour < 24; hour++) {
+      for (let minute = 0; minute < 60; minute += this.interval) {
+        this.times.push(
+          `${hour.toString().padStart(2, '0')}:${minute
+            .toString()
+            .padStart(2, '0')}`
+        );
+      }
+    }
+  }
 
   public formData: Episode = new Episode();
 
   ngOnInit(): void {
-    console.log('onInit episode form');
-    console.log('ngOnInit', this.isUploadInProgress);
+    this.globalService.logWriter('onInit episode form');
+    this.globalService.logWriter('minDate: ', this.minDate);
+    this.globalService.logWriter('ngOnInit', this.isUploadInProgress);
 
     this.route.params.subscribe((params) => {
-      console.log('params', params);
+      this.globalService.logWriter('params', params);
       this._id = params['episodeID'];
-      console.log('episode form _id', this._id);
+      this.globalService.logWriter('episode form _id', this._id);
 
       this.userObj.UserId = this.globalService.UserID;
       this.userObj.PodcastId = this.globalService.PodcastID;
       this.userObj.EpisodeId = this._id;
-      console.log('UserOBJ', this.userObj);
+      this.globalService.logWriter('UserOBJ', this.userObj);
 
       if (this._id) {
-        console.log('get episode');
+        this.globalService.logWriter('get episode');
         this.getEpisode();
       } else {
-        console.log('create episode');
+        this.globalService.logWriter('create episode');
         this.createEpisode();
       }
     });
   }
 
+  public get cantLeave(): boolean {
+    return this.isUploadInProgress || this.isImageChanged;
+  }
+
+  isDisabled(time: string): boolean {
+    const currentDateTime = new Date(`${this.scheduledDate} ${time}`);
+    return currentDateTime < new Date();
+  }
+
+  onDateChanged(event: any): void {
+    const selectedDate = new Date(event.target.value);
+    if (selectedDate <= new Date()) {
+      this.scheduledTime = this.getRoundTime(new Date());
+    }
+  }
+
+  setScheduleDate(date?: any) {
+    this.formData.IsVisible = false;
+    if (date && typeof date === 'string') {
+      date = new Date(date);
+    }
+
+    const currentDate = date ?? new Date();
+
+    this.scheduledDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
+    this.scheduledTime = this.getRoundTime(currentDate);
+  }
+
+  private getRoundTime(currentDate: Date) {
+    const minutes = currentDate.getMinutes();
+    const roundedMinutes = Math.ceil(minutes / this.interval) * this.interval;
+    currentDate.setMinutes(roundedMinutes);
+    return this.datePipe.transform(currentDate, 'HH:mm');
+  }
+
   uploadComplete(fileName: string): void {
     this.formData.MediaFile = fileName;
     this.isUploadInProgress = false;
-    console.log('uploadComplete', this.isUploadInProgress);
+    this.globalService.logWriter('uploadComplete', this.isUploadInProgress);
     this.updateEpisode();
   }
 
-  //TODO: trigger a notification when user hasn't uploaded yet
-  @HostListener('window:beforeunload', ['$event'])
+  //   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any) {
-    if (this.isUploadInProgress) {
+    this.globalService.logWriter('cantLeave', this.cantLeave);
+
+    if (this.cantLeave) {
       $event.returnValue = true;
-      alert('HostListener');
-      this.msgText = 'Changes aren`t submitted';
+
+      this.msgText = this.unsavedMsgText;
     }
   }
 
   uploadInProgress(fileNameOriginal: string): void {
     this.isUploadInProgress = true;
     this.formData.MediaFileOriginal = fileNameOriginal;
-    console.log('uploadInProgress', this.isUploadInProgress);
+    this.globalService.logWriter('uploadInProgress', this.isUploadInProgress);
   }
 
   imageChanged() {
-    this.msgText = 'Unsaved image';
+    this.isImageChanged = true;
+    this.msgText = this.unsavedMsgText;
   }
 
   imageUploadStart() {
-    console.log('imageUploadStart');
+    this.globalService.logWriter('imageUploadStart');
   }
 
   imageUploadComplete(fileName: string): void {
     this.formData.PosterName = fileName;
-    console.log('imageUploadComplete', this.isUploadInProgress);
+    this.globalService.logWriter(
+      'imageUploadComplete',
+      this.isUploadInProgress
+    );
     this.updateEpisode();
   }
 
   visibleToggle(isChecked: boolean): void {
     this.formData.IsVisible = isChecked;
-    console.log(isChecked);
+    this.globalService.logWriter(isChecked.toString());
   }
 
   getEpisode() {
     this.episodeService.getByID<Episode>(this._id).subscribe(
       (response) => {
         this.formData = response;
-        console.log(this.formData);
+        if (response.Scheduled) {
+          this.setScheduleDate(response.Scheduled);
+        }
+        this.globalService.logWriter(
+          'getEpisode formData',
+          JSON.stringify(this.formData),
+          LogLevel.DEBUG
+        );
       },
       (error) => {
-        console.error('Error fetching episodes:', error);
+        this.globalService.logWriter(
+          'Error fetching episodes:',
+          error,
+          LogLevel.ERROR
+        );
       }
     );
   }
@@ -128,19 +201,33 @@ export class EpisodeFormComponent {
         ]);
       },
       (error) => {
-        console.error('Error handling episode: ', error);
+        this.globalService.logWriter(
+          'Error creating episode: ',
+          error,
+          LogLevel.ERROR
+        );
       }
     );
   }
 
   onSubmit() {
-    console.log('onSubmit');
+    this.globalService.logWriter('onSubmit');
     this.imageUploadComponent.onUploadInit();
   }
 
   updateEpisode() {
+    if (this.scheduledDate && this.scheduledTime) {
+      this.formData.Scheduled = new Date(
+        `${this.scheduledDate} ${this.scheduledTime}`
+      ).toISOString();
+    }
+
+    if (this.formData.IsVisible && this.formData.Scheduled) {
+      this.formData.Scheduled = '';
+    }
+
     const { PodcastID, ...formDataWithoutPodcastID } = this.formData;
-    console.log('onSubmit formData', this.formData);
+    this.globalService.logWriter('onSubmit formData', this.formData);
 
     this.episodeService
       .update<Episode>(formDataWithoutPodcastID, this._id)
@@ -149,7 +236,11 @@ export class EpisodeFormComponent {
           this.msgText = 'SAVED';
         },
         (error) => {
-          console.error('Error handling episode: ', error);
+          this.globalService.logWriter(
+            'Error handling episode: ',
+            error,
+            LogLevel.ERROR
+          );
         }
       );
   }

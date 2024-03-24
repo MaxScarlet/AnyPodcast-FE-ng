@@ -1,5 +1,5 @@
 <h1>Episode</h1>
-<form (ngSubmit)="onSubmit()" style="width: 70vw;">
+<form (ngSubmit)="onSubmit()" style="width: 70vw">
   <div class="formElem">
     <label for="Title">Title: </label>
     <input
@@ -14,19 +14,23 @@
   <div class="formElem">
     <ng-container *ngIf="formData.MediaFile; else elseBlock">
       <audio controls controlsList="nodownload">
-        <source [src]="this.globalService.uploadConfig.URLPrefix + formData.MediaFile" type="audio/mpeg"/>
+        <source
+          [src]="this.globalService.uploadConfig.URLPrefix + formData.MediaFile"
+          type="audio/mpeg"
+        />
       </audio>
     </ng-container>
     <ng-template #elseBlock>
-      <app-file-upload style="width: 100%;"
+      <app-file-upload
+        style="width: 100%"
         [user]="userObj"
         (uploadFileName)="uploadComplete($event)"
         (uploadStarted)="uploadInProgress($event)"
       ></app-file-upload>
     </ng-template>
-    <i *ngIf="formData.MediaFileOriginal">{{formData.MediaFileOriginal}}</i>
+    <i *ngIf="formData.MediaFileOriginal">{{ formData.MediaFileOriginal }}</i>
   </div>
-  
+
   <div class="formElem vert">
     <label for="Description">Description: </label>
     <textarea
@@ -38,13 +42,49 @@
     ></textarea>
   </div>
 
-  <app-image-upload style="width: 100%;"
+  <app-image-upload
+    style="width: 100%"
     [user]="userObj"
     [previewURL]="formData.PosterName"
     (uploadComplete)="imageUploadComplete($event)"
     (uploadStarted)="imageUploadStart()"
     (imageChanged)="imageChanged()"
   ></app-image-upload>
+
+  <div
+    class="formElem"
+    *ngIf="this.scheduledDate && !this.formData.IsVisible; else elseSchedule"
+  >
+    <label for="scheduledDate">Schedule</label>
+    <input
+      type="date"
+      id="scheduledDate"
+      name="scheduledDate"
+      [(ngModel)]="this.scheduledDate"
+      (change)="onDateChanged($event)"
+      [min]="minDate"
+    />
+    <select
+      id="timeSelect"
+      class="timeSelect"
+      name="timeSelect"
+      [(ngModel)]="this.scheduledTime"
+    >
+      <option
+        *ngFor="let time of times"
+        [value]="time"
+        [disabled]="isDisabled(time)"
+      >
+        {{ time }}
+      </option>
+    </select>
+  </div>
+
+  <ng-template #elseSchedule>
+    <button type="button" (click)="setScheduleDate()">
+      <span class="fa fa-calendar"></span> Set date to publish
+    </button>
+  </ng-template>
 
   <label for="Publish">Published: </label>
   <app-toggle-slider

@@ -67,7 +67,8 @@ form {
   font-weight: bold;
 }
 
-.formElem input {
+.formElem input,
+.formElem select {
   width: 100%;
   padding: 10px;
   border: 1px solid var(--border-color);
@@ -75,6 +76,14 @@ form {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+.formElem input[type="date"],
+.formElem input[type="datetime-local"],
+.formElem input[type="time"] {
+  width: 120px;
+}
+.formElem .timeSelect {
+  width: 100px;
+}
 .formElem textarea {
   width: 100%;
   height: 100px;
