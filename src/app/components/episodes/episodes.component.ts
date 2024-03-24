@@ -15,6 +15,7 @@ import { LoggerService } from 'src/app/services/logger.service';
 import { PopupService } from 'src/app/services/popup.service';
 import { environment } from 'src/environment';
 import { EpisodeService } from '../../services/episode.service';
+import { LogLevel } from 'src/app/models/LogLevel';
 @Component({
   selector: 'app-episodes',
   templateUrl: './episodes.component.html',
@@ -50,7 +51,11 @@ export class EpisodesComponent implements OnDestroy {
       this.podcastID = this.globalService.PodcastID;
       this.fetchEpisodes();
     } catch (err) {
-      this.logger.create('error', err);
+      this.globalService.logWriter(
+        'Failed to fetch episodes',
+        err,
+        LogLevel.ERROR
+      );
     }
   }
 

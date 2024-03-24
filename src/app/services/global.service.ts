@@ -9,6 +9,9 @@ import { UploadConfig } from '../models/Config';
 import { FileMngService } from './file-mng.service';
 import { LoggerService } from './logger.service';
 import { LogRec } from '../models/LogRec';
+import { environment } from 'src/environment';
+import { LogLevel } from '../models/LogLevel';
+import { LogTarget } from '../models/LogTarget';
 
 @Injectable({
   providedIn: 'root',
@@ -33,7 +36,7 @@ export class GlobalService {
     private fileMngService: FileMngService,
     private logger: LoggerService
   ) {
-    this.logWriter('=== start ===', "=== start ===");
+    this.logWriter('=== start ===', '=== start ===' , LogLevel.INFO);
     this.logWriter('global service constructor');
   }
 
@@ -77,10 +80,23 @@ export class GlobalService {
     }
   }
 
-  public async logWriter(msg: string, val?: any): Promise<void> {
-    console.log(msg, val);
-    // localStorage.setItem(`${this.timeStamp()} | ${msg}`, JSON.stringify(val));
-    // const resp = await firstValueFrom(this.logger.create<LogRec>(msg, val));
+  public async logWriter(
+    msg: string,
+    val?: any,
+    logType: LogLevel = LogLevel.DEBUG
+  ): Promise<void> {
+    if (logType <= environment.logLevel) {
+      switch (environment.logTarget) {
+        case LogTarget.SERVICE:
+          const resp = await firstValueFrom(
+            this.logger.create<LogRec>(msg, val, logType)
+          );
+          break;
+        default:
+          console.log(`${LogLevel[logType]} ${msg}|`, val);
+          break;
+      }
+    }
   }
 
   private timeStamp(): string {
