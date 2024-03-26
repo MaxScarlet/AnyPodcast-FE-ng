@@ -1,7 +1,7 @@
 import {
-    HttpClient,
-    HttpErrorResponse,
-    HttpHeaders,
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
 } from '@angular/common/http';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
@@ -74,6 +74,7 @@ export class FileUploadComponent {
       User: this.user,
       TotalParts: totalParts,
       Size: this.selectedFile.size,
+      ContentType: `${this.selectedFile.type}`,
     };
 
     this.fileMngService.init(upload).subscribe(
@@ -83,6 +84,7 @@ export class FileUploadComponent {
 
         let uploadedPartsCnt = 0;
         const uploadedParts: any[] = [];
+        console.log('this.selectedFile?.type', this.selectedFile?.type);
 
         for (let partNumber = 1; partNumber <= totalParts; partNumber++) {
           const start = (partNumber - 1) * partSize;

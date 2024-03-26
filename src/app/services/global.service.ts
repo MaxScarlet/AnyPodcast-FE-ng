@@ -17,15 +17,17 @@ import { LogTarget } from '../models/LogTarget';
   providedIn: 'root',
 })
 export class GlobalService {
-  public Podcast = new Podcast();
+  public UserID: string = '';
+  // public userToken: string = '';
 
+  public uploadConfig: UploadConfig = new UploadConfig();
+
+  public Podcast = new Podcast();
   public get PodcastID(): string {
     return this.Podcast._id;
   }
 
-  public UserID: string = '';
-  public uploadConfig: UploadConfig = new UploadConfig();
-  private _appVar = new BehaviorSubject<string>('initialValue');
+  private _appVar = new BehaviorSubject<string>('initialValue'); // trigger for Episode list to be refreshed after Podcast is changed from popup
   public appVar$ = this._appVar.asObservable();
 
   constructor(
@@ -36,7 +38,7 @@ export class GlobalService {
     private fileMngService: FileMngService,
     private logger: LoggerService
   ) {
-    this.logWriter('=== start ===', '=== start ===' , LogLevel.INFO);
+    this.logWriter('=== start ===', '=== start ===', LogLevel.INFO);
     this.logWriter('global service constructor');
   }
 
@@ -67,13 +69,19 @@ export class GlobalService {
     const userSub = await firstValueFrom(this.auth.user$);
     this.logWriter('userSub: ', userSub);
 
+    // this.auth.idTokenClaims$.subscribe((claims) => {
+    //   // console.log('claims', claims);
+    //   // console.log('claims-JWT', claims?.__raw);
+    //   if (claims) this.userToken = claims.__raw;
+    // });
+
     if (userSub && userSub.sub) {
       this.UserID = userSub.sub.split('|')[1];
 
       this.uploadConfig = await firstValueFrom(this.fileMngService.getConfig());
       this.logWriter('uploadConfig', this.uploadConfig);
-
       await this.getPodcast();
+
       if (!this.Podcast._id) {
         this.router.navigate(['/podcast/create']);
       }
@@ -88,8 +96,9 @@ export class GlobalService {
     if (logType <= environment.logLevel) {
       switch (environment.logTarget) {
         case LogTarget.SERVICE:
+          const strVal = typeof val === 'string' ? val : JSON.stringify(val);
           const resp = await firstValueFrom(
-            this.logger.create<LogRec>(msg, val, logType)
+            this.logger.create<LogRec>(msg, strVal, logType)
           );
           break;
         default:

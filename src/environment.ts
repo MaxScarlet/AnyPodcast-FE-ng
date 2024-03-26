@@ -6,9 +6,10 @@ export const environment = {
   episodeUrl: 'http://localhost:4062',
   fileMngUrl: 'http://localhost:4063',
   loggerUrl: 'http://localhost:4064',
+  feedMngUrl: 'http://localhost:4065',
+
   logLevel: LogLevel.DEBUG,
   logTarget: LogTarget.CONSOLE,
-  //   feedMngUrl: 'http://localhost:4064',
 
   auth0: {
     domain: 'oxymoron-tech.eu.auth0.com',

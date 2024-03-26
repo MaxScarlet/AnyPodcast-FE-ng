@@ -3,7 +3,7 @@ import {
   HttpErrorResponse,
   HttpHeaders,
 } from '@angular/common/http';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -16,6 +16,7 @@ import { PopupService } from 'src/app/services/popup.service';
 import { environment } from 'src/environment';
 import { EpisodeService } from '../../services/episode.service';
 import { LogLevel } from 'src/app/models/LogLevel';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-episodes',
   templateUrl: './episodes.component.html',
@@ -30,6 +31,7 @@ export class EpisodesComponent implements OnDestroy {
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',
   });
+
   constructor(
     private episodeService: EpisodeService,
     public globalService: GlobalService,
@@ -38,12 +40,27 @@ export class EpisodesComponent implements OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private datePipe: DatePipe
   ) {
     this.subscription = this.globalService.appVar$.subscribe((value) => {
       this.globalService.logWriter('Episodes: appVar$.subscribe');
       this.init();
     });
+  }
+
+  toggleVisible(episode: Episode) {
+    episode.IsVisible = !episode.IsVisible;
+    if (episode.IsVisible) {
+      episode.Scheduled = '';
+    }
+    const { PosterName, ...episodeWithoutPosterName } = episode;
+
+    this.episodeService
+      .update(episodeWithoutPosterName, episodeWithoutPosterName._id)
+      .subscribe((data) => {
+        console.log('data', data);
+      });
   }
 
   async init() {
@@ -64,7 +81,6 @@ export class EpisodesComponent implements OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  //TODO: fix caching issue for images
   fetchEpisodes(): void {
     this.isLoading = true;
     this.episodeList = [];
@@ -75,16 +91,16 @@ export class EpisodesComponent implements OnDestroy {
           const item = this.episodeList[i];
           item.PosterName = this.globalService.imageURL(item.PosterName);
 
-          const createdDate = new Date(item.Created);
-          const formattedDate = createdDate.toLocaleString('en-GB', {
-            day: 'numeric',
-            month: 'short',
-            year: '2-digit',
-            hour: 'numeric',
-            minute: 'numeric',
-          });
-
-          item.Created = formattedDate;
+          item.Created = this.datePipe.transform(
+            item.Created,
+            'yyyy-MM-dd HH:mm'
+          )!;
+          if (item.Scheduled) {
+            item.Scheduled = this.datePipe.transform(
+              item.Scheduled,
+              'MMM dd HH:mm'
+            )!;
+          }
         }
         this.episodeList.reverse();
         this.isLoading = false;

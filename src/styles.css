@@ -14,6 +14,22 @@
   --menu-color: #2c2d2d;
   --menu-color-active: #881719;
 }
+
+.header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.header h1 {
+  margin: 0 10px 0 0;
+  padding: 0;
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
 .posterImage {
   width: 100px;
 }

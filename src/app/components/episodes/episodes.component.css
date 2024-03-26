@@ -1,18 +1,3 @@
-.header {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.header h1 {
-  margin: 0 10px 0 0;
-  padding: 0;
-  color: var(--primary-color);
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-
 
 .episode-list {
   height: calc(100vh * 0.75);
@@ -33,7 +18,7 @@ li {
   display: grid;
   align-items: start;
 
-  grid-template-columns: 110px 1fr 100px;
+  grid-template-columns: 110px 1fr 150px;
   justify-content: left;
 }
 .textWrapper {
@@ -42,15 +27,13 @@ li {
   gap: 2px;
   height: 100%;
 }
-.textWrapper b {
-}
+
 .textWrapper p {
   margin: 0;
 }
 .draftWrapper {
   border: 1.8px dashed var(--btn-color);
 }
-
 
 .eyeDateWrapper {
   height: 100%;
@@ -59,11 +42,19 @@ li {
   align-items: center;
   justify-items: center;
 }
-
+.unpublished {
+  background-color: #d8d8d8;
+  color: #707070;
+}
+.episode-scheduled {
+  color: var(--btn-color);
+}
 .eyeDateWrapper b {
   color: var(--primary-color);
 }
-
+.episode-visible {
+  font-size: x-large;
+}
 li button {
   width: 25px;
   height: 25px;

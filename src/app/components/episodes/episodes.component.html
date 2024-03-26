@@ -1,3 +1,5 @@
+
+<!-- TODO: Change into component instead of div  -->
 <div class="header">
   <h1>Episodes</h1>
   <button
@@ -23,6 +25,7 @@
     <li
       *ngFor="let episode of episodeList"
       [class.draftWrapper]="episode.Title.includes('Untitled')"
+      [ngClass]="{ unpublished: !episode.IsVisible }"
     >
       <img
         class="posterImage"
@@ -43,15 +46,19 @@
         </div>
       </div>
       <div class="eyeDateWrapper">
+        <b *ngIf="episode.Title.includes('Untitled')">Draft</b>
         <div
           class="episode-visible fa"
           [ngClass]="{
             'fa-eye': episode.IsVisible,
             'fa-eye-slash': !episode.IsVisible,
           }"
+          (click)="toggleVisible(episode)"
         ></div>
-        <b *ngIf="episode.Title.includes('Untitled')">Draft</b>
-        <div class="episode-created">{{ episode.Created }}</div>
+        <div class="episode-scheduled" *ngIf="episode.Scheduled">
+          <span class="fa fa-calendar"></span> {{ episode.Scheduled }}
+        </div>
+        <div class="episode-created">Created at:{{ episode.Created }}</div>
       </div>
     </li>
   </ul>

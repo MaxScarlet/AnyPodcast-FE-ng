@@ -25,7 +25,7 @@ export class NavComponent {
       if (userSub && userSub.sub) {
         this.user = userSub;
         this.isAuthenticated = true;
-        this.tokenService.getExpiration();
+        // this.tokenService.getExpiration(); // TODO: check if this is needed
       }
     });
   }

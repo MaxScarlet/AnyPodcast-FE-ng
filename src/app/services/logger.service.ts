@@ -16,16 +16,14 @@ export class LoggerService {
   });
   constructor(private http: HttpClient) {}
 
-  create<T>(Msg: string, Data: any, LogType: LogLevel): Observable<T> {
+  create<T>(msg: string, data: string, logType: LogLevel): Observable<T> {
     const logRec: LogRec = {
       UserID: 'global',
-      Msg,
-      Data: JSON.stringify(Data),
-      LogType,
+      Msg: msg,
+      Data: data,
+      LogType: logType,
     };
-    const response = this.http.post(this.mainUrl, logRec, {
-      headers: this.headers,
-    }) as Observable<T>;
+    const response = this.http.post(this.mainUrl, logRec, { headers: this.headers }) as Observable<T>;
     return response;
   }
 }

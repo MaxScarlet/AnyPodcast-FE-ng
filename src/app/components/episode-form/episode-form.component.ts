@@ -124,7 +124,7 @@ export class EpisodeFormComponent {
     this.formData.MediaFile = fileName;
     this.isUploadInProgress = false;
     this.globalService.logWriter('uploadComplete', this.isUploadInProgress);
-    this.updateEpisode();
+    this.updateEpisode(this.formData);
   }
 
   //   @HostListener('window:beforeunload', ['$event'])
@@ -159,7 +159,7 @@ export class EpisodeFormComponent {
       'imageUploadComplete',
       this.isUploadInProgress
     );
-    this.updateEpisode();
+    this.updateEpisode(this.formData);
   }
 
   visibleToggle(isChecked: boolean): void {
@@ -168,6 +168,7 @@ export class EpisodeFormComponent {
   }
 
   getEpisode() {
+    this.isLoading = true;
     this.episodeService.getByID<Episode>(this._id).subscribe(
       (response) => {
         this.formData = response;
@@ -179,6 +180,7 @@ export class EpisodeFormComponent {
           JSON.stringify(this.formData),
           LogLevel.DEBUG
         );
+        this.isLoading = false;
       },
       (error) => {
         this.globalService.logWriter(
@@ -215,19 +217,19 @@ export class EpisodeFormComponent {
     this.imageUploadComponent.onUploadInit();
   }
 
-  updateEpisode() {
+  public updateEpisode(episode: Episode) {
     if (this.scheduledDate && this.scheduledTime) {
-      this.formData.Scheduled = new Date(
+      episode.Scheduled = new Date(
         `${this.scheduledDate} ${this.scheduledTime}`
       ).toISOString();
     }
 
-    if (this.formData.IsVisible && this.formData.Scheduled) {
-      this.formData.Scheduled = '';
+    if (episode.IsVisible && episode.Scheduled) {
+      episode.Scheduled = '';
     }
 
-    const { PodcastID, ...formDataWithoutPodcastID } = this.formData;
-    this.globalService.logWriter('onSubmit formData', this.formData);
+    const { PodcastID, ...formDataWithoutPodcastID } = episode;
+    this.globalService.logWriter('onSubmit formData', episode);
 
     this.episodeService
       .update<Episode>(formDataWithoutPodcastID, this._id)

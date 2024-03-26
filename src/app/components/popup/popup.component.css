@@ -2,7 +2,11 @@
   cursor: pointer;
   text-align: center;
   padding: 5px;
-  display: flex;
+  display: grid;
+  align-items: start;
+
+  grid-template-columns: 50px 1fr 15px;
+  justify-content: left;
 }
 h1 {
   padding: 0px;

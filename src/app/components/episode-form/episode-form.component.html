@@ -1,5 +1,14 @@
-<h1>Episode</h1>
-<form (ngSubmit)="onSubmit()" style="width: 70vw">
+<div class="header">
+  <h1>Episode</h1>
+  <div *ngIf="isLoading" class="loading-spinner">
+    <mat-progress-spinner
+      mode="indeterminate"
+      [diameter]="30"
+    ></mat-progress-spinner>
+  </div>
+</div>
+
+<form *ngIf="!isLoading" (ngSubmit)="onSubmit()" style="width: 70vw">
   <div class="formElem">
     <label for="Title">Title: </label>
     <input

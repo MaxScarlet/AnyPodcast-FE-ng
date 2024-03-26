@@ -9,19 +9,33 @@
       title="Create"
       (click)="closeDialog()"
     ></button>
+    <div *ngIf="isLoading" class="loading-spinner">
+      <mat-progress-spinner
+        mode="indeterminate"
+        [diameter]="20"
+      ></mat-progress-spinner>
+    </div>
   </div>
-  <ul *ngFor="let podcast of podcastList">
-    <li
-      class="item"
-      title="{{ podcast.Title }}"
-      (click)="handleLIClick(podcast._id)"
-      [ngClass]="{ selected: podcast._id === this.globalService.PodcastID }"
-    >
-      <img src="{{ podcast.PosterName }}" alt="" />
-      <b>{{ podcast.Title }}</b>
-    </li>
-  </ul>
-
+  <div *ngIf="!isLoading">
+    <ul *ngFor="let podcast of podcastList">
+      <li
+        class="item"
+        title="{{ podcast.Title }}"
+        (click)="handleLIClick(podcast._id)"
+        [ngClass]="{ selected: podcast._id === this.globalService.PodcastID }"
+      >
+        <img src="{{ podcast.PosterName }}" alt="" />
+        <b>{{ podcast.Title }}</b>
+        <div
+          class="episode-visible fa"
+          [ngClass]="{
+            'fa-eye': podcast.IsVisible,
+            'fa-eye-slash': !podcast.IsVisible,
+          }"
+        ></div>
+      </li>
+    </ul>
+  </div>
   <div mat-dialog-actions class="closeBtn">
     <button mat-button (click)="closeDialog()">Close</button>
   </div>

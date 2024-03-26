@@ -15,6 +15,7 @@ export class PopupComponent {
   public podcastList: Podcast[] = [];
   public podcasts: Podcast[] = [];
   private userID: string = this.globalService.UserID;
+  public isLoading: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -26,6 +27,7 @@ export class PopupComponent {
   ) {}
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.podcastService.get<Podcast>(this.userID).subscribe(
       (response: Podcast[]) => {
         this.podcasts = response;
@@ -35,6 +37,7 @@ export class PopupComponent {
             PosterName: this.globalService.imageURL(item.PosterName),
           };
         });
+        this.isLoading = false;
       },
       (error) => {
         console.error('Error fetching episodes:', error);
