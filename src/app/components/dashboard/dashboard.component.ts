@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LogLevel } from 'src/app/models/LogLevel';
 import { Podcast } from 'src/app/models/Podcast';
 import { GlobalService } from 'src/app/services/global.service';
 import { PodcastService } from 'src/app/services/podcast.service';
@@ -41,7 +42,7 @@ export class DashboardComponent {
         this.podcastList.reverse();
       },
       (error) => {
-        console.error('Error fetching episodes:', error);
+        this.globalService.logWriter('Error fetching episodes:', error , LogLevel.ERROR);
       }
     );
   }

@@ -102,7 +102,7 @@ export class GlobalService {
           );
           break;
         default:
-          console.log(`${LogLevel[logType]} ${msg}|`, val);
+          this.logWriter(`${LogLevel[logType]} ${msg}|`, val, LogLevel.DEBUG);
           break;
       }
     }
@@ -154,10 +154,10 @@ export class GlobalService {
           this.logWriter('Global: getPodcast', this.Podcast);
           this.cookieService.set('podcastID', response[0]._id, { path: '/' });
         } else {
-          console.warn('Podcasts not found');
+          this.logWriter('Podcasts not found', '', LogLevel.WARN);
         }
       } catch (error) {
-        console.error('Error fetching podcast:', error);
+        this.logWriter('Error fetching podcast:', error, LogLevel.ERROR);
       }
     }
   }

@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { LogLevel } from 'src/app/models/LogLevel';
 import { Podcast } from 'src/app/models/Podcast';
 import { GlobalService } from 'src/app/services/global.service';
 import { PodcastService } from 'src/app/services/podcast.service';
@@ -40,7 +41,11 @@ export class PopupComponent {
         this.isLoading = false;
       },
       (error) => {
-        console.error('Error fetching episodes:', error);
+        this.globalService.logWriter(
+          'Error fetching episodes:',
+          error,
+          LogLevel.ERROR
+        );
       }
     );
   }

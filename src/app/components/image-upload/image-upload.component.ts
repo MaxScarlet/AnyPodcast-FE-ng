@@ -6,6 +6,7 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { LogLevel } from 'src/app/models/LogLevel';
 
 import { Upload } from 'src/app/models/Upload';
 import { User } from 'src/app/models/User';
@@ -69,7 +70,11 @@ export class ImageUploadComponent {
               this.previewImageUrl = event.target?.result as string;
               this.imageChanged.emit();
             } else {
-              console.error('The selected file is not a valid image.');
+              this.globalService.logWriter(
+                'The selected file is not a valid image.',
+                '',
+                LogLevel.ERROR
+              );
               target.value = '';
               this.previewImageUrl = '';
             }
@@ -82,10 +87,10 @@ export class ImageUploadComponent {
   }
 
   onUploadInit(): void {
-    this.globalService.logWriter('user', this.user);
+    this.globalService.logWriter('user', this.user, LogLevel.DEBUG);
 
     if (!this.selectedFile) {
-      console.warn('No file selected');
+      this.globalService.logWriter('No file selected', '', LogLevel.WARN);
       this.uploadComplete.emit();
     } else {
       this.uploadStarted.emit(this.selectedFile?.name);
@@ -95,12 +100,16 @@ export class ImageUploadComponent {
         User: this.user,
         Size: this.selectedFile.size,
       };
-      console.log("Upload", upload);
-      
+      this.globalService.logWriter('Upload', upload, LogLevel.DEBUG);
+
       this.fileMngService.upload(upload).subscribe(
         (uploadResp: Upload) => this.apiHandlerUpload(uploadResp),
         (error: HttpErrorResponse) => {
-          console.error('Error initiating multipart upload', error);
+          this.globalService.logWriter(
+            'Error initiating multipart upload',
+            error,
+            LogLevel.ERROR
+          );
         }
       );
     }
@@ -127,7 +136,11 @@ export class ImageUploadComponent {
         .subscribe(
           (event) => this.presignedURLHandler(event, uploadResp),
           (error) => {
-            console.error('Error uploading image to S3', error);
+            this.globalService.logWriter(
+              'Error uploading image to S3',
+              error,
+              LogLevel.ERROR
+            );
           }
         );
     }

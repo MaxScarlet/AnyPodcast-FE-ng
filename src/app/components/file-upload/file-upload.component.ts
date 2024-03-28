@@ -4,10 +4,12 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { LogLevel } from 'src/app/models/LogLevel';
 
 import { Upload } from 'src/app/models/Upload';
 import { User } from 'src/app/models/User';
 import { FileMngService } from 'src/app/services/file-mng.service';
+import { GlobalService } from 'src/app/services/global.service';
 
 @Component({
   selector: 'app-file-upload',
@@ -23,7 +25,8 @@ export class FileUploadComponent {
   uploadProgress: number = 0;
   constructor(
     private http: HttpClient,
-    private fileMngService: FileMngService
+    private fileMngService: FileMngService,
+    private globalService: GlobalService
   ) {}
 
   private headers = new HttpHeaders({
@@ -31,9 +34,13 @@ export class FileUploadComponent {
   });
 
   onFileSelected(event: any): void {
-    console.log('user', this.user);
+    this.globalService.logWriter('user', this.user, LogLevel.DEBUG);
     this.selectedFile = event.target.files[0];
-    console.log(this.selectedFile);
+    this.globalService.logWriter(
+      'Selected File',
+      this.selectedFile as File,
+      LogLevel.DEBUG
+    );
     this.onUploadInit();
   }
 
@@ -58,10 +65,10 @@ export class FileUploadComponent {
   }
 
   onUploadInit(): void {
-    console.log('user', this.user);
+    this.globalService.logWriter('user', this.user, LogLevel.DEBUG);
 
     if (!this.selectedFile) {
-      console.error('No file selected');
+      this.globalService.logWriter('No file selected', LogLevel.DEBUG);
       return;
     }
     this.uploadStarted.emit(this.selectedFile?.name);
@@ -79,12 +86,20 @@ export class FileUploadComponent {
 
     this.fileMngService.init(upload).subscribe(
       (upload: Upload) => {
-        console.log('Response(init): ', upload);
+        this.globalService.logWriter(
+          'Response(init): ',
+          upload,
+          LogLevel.DEBUG
+        );
         upload = upload;
 
         let uploadedPartsCnt = 0;
         const uploadedParts: any[] = [];
-        console.log('this.selectedFile?.type', this.selectedFile?.type);
+        this.globalService.logWriter(
+          'this.selectedFile?.type',
+          this.selectedFile?.type,
+          LogLevel.DEBUG
+        );
 
         for (let partNumber = 1; partNumber <= totalParts; partNumber++) {
           const start = (partNumber - 1) * partSize;
@@ -100,13 +115,21 @@ export class FileUploadComponent {
             .subscribe(
               (response) => {
                 if (response.status === 200 || response.status === 204) {
-                  console.log('Part uploaded to S3', response);
+                  this.globalService.logWriter(
+                    'Part uploaded to S3',
+                    response,
+                    LogLevel.DEBUG
+                  );
                   uploadedPartsCnt++;
 
                   this.uploadProgress = Math.round(
                     (uploadedPartsCnt / totalParts) * 100
                   );
-                  console.log('progress', this.uploadProgress);
+                  this.globalService.logWriter(
+                    'progress',
+                    this.uploadProgress,
+                    LogLevel.DEBUG
+                  );
 
                   const eTag = response.headers.get('ETag')?.replace(/"/g, '');
                   uploadedParts.push({ PartNumber: partNumber, ETag: eTag });
@@ -116,34 +139,46 @@ export class FileUploadComponent {
                       .complete(upload, uploadedParts)
                       .subscribe(
                         (completeResponse) => {
-                          console.log(
+                          this.globalService.logWriter(
                             'Multipart upload completed successfully',
-                            completeResponse
+                            completeResponse,
+                            LogLevel.DEBUG
                           );
                           this.uploadFileName.emit(completeResponse.FileName);
                         },
                         (error) => {
-                          console.error(
+                          this.globalService.logWriter(
                             'Error completing multipart upload',
-                            error
+                            error,
+                            LogLevel.ERROR
                           );
                         }
                       );
                   }
                 } else {
-                  console.error(
-                    `Failed to upload part: HTTP ${response.status}`
+                  this.globalService.logWriter(
+                    `Failed to upload part:`,
+                    response.status,
+                    LogLevel.ERROR
                   );
                 }
               },
               (error) => {
-                console.error('Error uploading part to S3', error);
+                this.globalService.logWriter(
+                  'Error uploading part to S3',
+                  error,
+                  LogLevel.ERROR
+                );
               }
             );
         }
       },
       (error: HttpErrorResponse) => {
-        console.error('Error initiating multipart upload', error);
+        this.globalService.logWriter(
+          'Error initiating multipart upload',
+          error,
+          LogLevel.ERROR
+        );
       }
     );
   }

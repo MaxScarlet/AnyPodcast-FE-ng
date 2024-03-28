@@ -59,7 +59,7 @@ export class EpisodesComponent implements OnDestroy {
     this.episodeService
       .update(episodeWithoutPosterName, episodeWithoutPosterName._id)
       .subscribe((data) => {
-        console.log('data', data);
+        this.globalService.logWriter('data', data, LogLevel.DEBUG);
       });
   }
 
@@ -106,7 +106,7 @@ export class EpisodesComponent implements OnDestroy {
         this.isLoading = false;
       },
       (error) => {
-        console.error('Error fetching episodes:', error);
+        this.globalService.logWriter('Error fetching episodes:', error , LogLevel.ERROR);
         this.isLoading = false;
       }
     );
@@ -143,13 +143,13 @@ export class EpisodesComponent implements OnDestroy {
               this.globalService.logWriter('Deleted Episode', resp);
             },
             (error: HttpErrorResponse) => {
-              console.error('Error initiating multipart upload', error);
+              this.globalService.logWriter('Error initiating multipart upload', error , LogLevel.ERROR);
             }
           );
         this.fetchEpisodes();
       },
       (error) => {
-        console.error('Failed to delete episodes', error);
+        this.globalService.logWriter('Failed to delete episodes', error , LogLevel.ERROR);
       }
     );
   }
