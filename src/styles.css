@@ -13,6 +13,23 @@
   --menu-bg-color: #c7c7c7;
   --menu-color: #2c2d2d;
   --menu-color-active: #881719;
+
+}
+
+.fc .fc-daygrid-event-harness{
+    cursor: pointer;
+}
+
+.poster {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: calc(100vw +20px);
+  height: calc(100vh - 40px - 96px);
+  /* margin: -10px; */
+  background-image: url("/assets/images/Poster.jpg");
+  background-size: cover;
+  background-position: top center;
 }
 
 .header {

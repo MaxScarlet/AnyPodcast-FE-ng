@@ -10,4 +10,5 @@ export class Episode {
   PosterName: string = '';
   MediaFile!: string;
   MediaFileOriginal!: string;
+  Published?: string;
 }

@@ -33,12 +33,14 @@ import { GlobalService } from './services/global.service';
 import { LoggerService } from './services/logger.service';
 import { PodcastService } from './services/podcast.service';
 import { PopupService } from './services/popup.service';
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 export function initializeGlobalService(
   globalService: GlobalService
 ): () => Promise<any> {
   return () => globalService.init();
 }
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -75,6 +77,7 @@ export function initializeGlobalService(
     MatDialogModule,
     MatSliderModule,
     MatProgressSpinnerModule,
+    FullCalendarModule
   ],
   providers: [
     EpisodeService,

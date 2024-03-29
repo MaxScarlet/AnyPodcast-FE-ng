@@ -1,0 +1,8 @@
+.disable-content {
+  pointer-events: none; /* Disable pointer events */
+  opacity: 0.5; /* Optionally reduce opacity to indicate disabled state */
+}
+.spinnerPoster {
+  margin-top: calc(-11%);
+  margin-left: calc(-2%);
+}

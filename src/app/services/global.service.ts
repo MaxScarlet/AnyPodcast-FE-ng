@@ -29,6 +29,7 @@ export class GlobalService {
 
   private _appVar = new BehaviorSubject<string>('initialValue'); // trigger for Episode list to be refreshed after Podcast is changed from popup
   public appVar$ = this._appVar.asObservable();
+  public isLoading = true;
 
   constructor(
     private auth: AuthService,
@@ -55,6 +56,7 @@ export class GlobalService {
 
   async init() {
     this.logWriter('global service init');
+
     await this.getUserID();
   }
 
@@ -78,13 +80,17 @@ export class GlobalService {
     if (userSub && userSub.sub) {
       this.UserID = userSub.sub.split('|')[1];
 
-      this.uploadConfig = await firstValueFrom(this.fileMngService.getConfig());
-      this.logWriter('uploadConfig', this.uploadConfig);
-      await this.getPodcast();
-
-      if (!this.Podcast._id) {
-        this.router.navigate(['/podcast/create']);
-      }
+      this.fileMngService.getConfig().subscribe(async (config) => {
+        this.uploadConfig = config;
+        this.logWriter('uploadConfig', this.uploadConfig);
+        await this.getPodcast();
+        this.isLoading = false;
+        if (!this.Podcast._id) {
+          this.router.navigate(['/podcast/create']);
+        }
+      });
+    } else {
+      this.isLoading = false;
     }
   }
 
@@ -102,7 +108,7 @@ export class GlobalService {
           );
           break;
         default:
-          this.logWriter(`${LogLevel[logType]} ${msg}|`, val, LogLevel.DEBUG);
+          console.log(`${LogLevel[logType]} ${msg}|`, val);
           break;
       }
     }

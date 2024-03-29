@@ -29,8 +29,6 @@ export class PodcastService {
   }
 
   getByID<T>(id: string): Observable<T> {
-    //console.log('Headers:', this.headers);
-    
     const fullUrl: string = `${this.mainUrl}/${id}`;
     const response = this.http.get(fullUrl, { headers: this.headers }) as Observable<T>;
     return response;
