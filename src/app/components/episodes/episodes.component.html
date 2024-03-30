@@ -56,9 +56,10 @@
           (click)="toggleVisible(episode)"
         ></div>
         <div class="episode-scheduled" *ngIf="episode.Scheduled">
-          <span class="fa fa-calendar"></span> {{ episode.Scheduled }}
+          <span class="fa fa-calendar"></span> {{ this.datePipe.transform( episode.Scheduled, 'dd MMM HH:mm') }}
         </div>
-        <div class="episode-created">Created at:{{ episode.Created }}</div>
+        <div class="episode-created" *ngIf="!episode.IsVisible">Created: {{ this.datePipe.transform( episode.Created, 'dd MMM HH:mm') }}</div>
+        <div class="episode-created" *ngIf="episode.IsVisible">Published: {{ this.datePipe.transform( episode.Published, 'dd MMM HH:mm') }}</div>
       </div>
     </li>
   </ul>

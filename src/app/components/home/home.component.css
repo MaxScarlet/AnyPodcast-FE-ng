@@ -10,8 +10,8 @@
 } */
 
 .poster {
-  width: calc(100vw +20px);
-  height: calc(100vh - 40px - 96px);
+
+  height: calc(100vh - 96px);
   margin: -10px;
   background-image: url("/assets/images/Poster.jpg");
   background-size: cover;

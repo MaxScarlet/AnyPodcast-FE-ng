@@ -1,17 +1,13 @@
-<div class="container">
-  <div class="header">
-    <h1>Dashboard</h1>
-    <div *ngIf="isLoading" class="loading-spinner">
-      <mat-progress-spinner
-        mode="indeterminate"
-        [diameter]="30"
-      ></mat-progress-spinner>
-    </div>
+<div class="header">
+  <h1>Dashboard</h1>
+  <div *ngIf="isLoading" class="loading-spinner">
+    <mat-progress-spinner
+      mode="indeterminate"
+      [diameter]="30"
+    ></mat-progress-spinner>
   </div>
-  <full-calendar
-    (dateSet)="handleMonthChange($event)"
-    [options]="calendarOptions"
-    *ngIf="!isLoading"
-  >
-  </full-calendar>
+</div>
+
+<div class="container">
+  <full-calendar [options]="calendarOptions" *ngIf="!isLoading"></full-calendar>
 </div>

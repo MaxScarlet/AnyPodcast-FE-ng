@@ -1,15 +1,12 @@
-.footer {
+footer {
   background-color: var(--menu-bg-color);
   color: var(--menu-color);
   text-align: center;
   font-weight: bold;
-  padding: 10px;
+  padding: 1rem;
   position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
 }
 
-.footer a {
+footer a {
   color: var(--menu-color-active);
 }

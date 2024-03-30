@@ -41,7 +41,7 @@ export class EpisodesComponent implements OnDestroy {
     private route: ActivatedRoute,
     private http: HttpClient,
     private logger: LoggerService,
-    private datePipe: DatePipe
+    public datePipe: DatePipe
   ) {
     this.subscription = this.globalService.appVar$.subscribe((value) => {
       this.globalService.logWriter('Episodes: appVar$.subscribe');
@@ -91,16 +91,13 @@ export class EpisodesComponent implements OnDestroy {
           const item = this.episodeList[i];
           item.PosterName = this.globalService.imageURL(item.PosterName);
 
-          item.Created = this.datePipe.transform(
-            item.Created,
-            'yyyy-MM-dd HH:mm'
-          )!;
-          if (item.Scheduled) {
-            item.Scheduled = this.datePipe.transform(
-              item.Scheduled,
-              'MMM dd HH:mm'
-            )!;
-          }
+          // item.Created = this.datePipe.transform( item.Created, 'yyyy-MM-dd HH:mm')!;
+          // if (item.Scheduled) {
+          //   item.Scheduled = this.datePipe.transform(
+          //     item.Scheduled,
+          //     'MMM dd HH:mm'
+          //   )!;
+          // }
         }
         this.episodeList.reverse();
         this.isLoading = false;

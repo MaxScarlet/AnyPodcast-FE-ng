@@ -1,26 +1,28 @@
 .container {
-  max-width: 800px;
+  max-width: calc(80%);
   margin: 0 auto;
-  padding: 20px;
 }
 
-.podcast-card {
-  display: flex;
-  background-color: #f4f4f4;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
+@media (min-width: 1600px) {
+  .container {
+    max-width: calc(50%);
+  }
 }
 
-.podcast-card h3 {
-  margin-top: 0;
-  margin-bottom: 5px;
+@media (max-width: 1300px) {
+  .container {
+    max-width: calc(70%);
+  }
 }
 
-.podcast-card p {
-  margin: 0;
-  color: #666;
+@media (max-width: 900px) {
+  .container {
+    max-width: calc(85% );
+  }
 }
-.podcastDetails {
-  margin-left: 10px;
+
+@media (max-width: 600px) {
+  .container {
+    max-width: calc(100%);
+  }
 }
