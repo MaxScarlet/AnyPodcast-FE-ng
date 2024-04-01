@@ -12,7 +12,8 @@
 .poster {
 
   height: calc(100vh - 96px);
-  margin: -10px;
+  margin-left: -10px;
+  /* margin-top: -10px; */
   background-image: url("/assets/images/Poster.jpg");
   background-size: cover;
   background-position: top center;

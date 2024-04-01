@@ -10,11 +10,8 @@ export class AppComponent {
   title = 'AnyPodcast';
   public isLoading = true;
 
-  constructor(public globalService: GlobalService) {
-    console.log('app-component');
-  }
+  constructor(public globalService: GlobalService) {}
   async ngOnInit() {
-    console.log('ngOnInit app component');
     this.isLoading = false;
   }
 }

@@ -1,16 +1,19 @@
-<div [ngClass]="{ 'disable-content': globalService.isLoading }">
+<div
+  class="viewPort"
+  [ngClass]="{ 'disable-content': globalService.isLoading }"
+>
   <app-nav></app-nav>
   <div *ngIf="globalService.isLoading">
-      <div class="poster">
-        <mat-progress-spinner
-          class="spinnerPoster"
-          mode="indeterminate"
-          [diameter]="100"
-        ></mat-progress-spinner>
-      </div>
+    <div class="poster">
+      <mat-progress-spinner
+        class="spinnerPoster"
+        mode="indeterminate"
+        [diameter]="100"
+      ></mat-progress-spinner>
+    </div>
   </div>
-  <div class="mainCont" *ngIf="!globalService.isLoading">
+  <div *ngIf="!globalService.isLoading" style="overflow-y: auto">
     <router-outlet></router-outlet>
   </div>
-  <app-footer></app-footer>
+  <footer class="footer">&copy; 2023 v.0.2.1</footer>
 </div>

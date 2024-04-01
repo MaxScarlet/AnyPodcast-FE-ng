@@ -39,15 +39,16 @@ main {
   overflow: auto;
 } */
 
-header, footer {
+header,
+footer {
   background-color: var(--menu-bg-color);
   color: var(--menu-color);
   text-align: center;
   padding: 1rem;
 }
 
-.fc .fc-daygrid-event-harness{
-    cursor: pointer;
+.fc .fc-daygrid-event-harness {
+  cursor: pointer;
 }
 
 .poster {
@@ -76,7 +77,6 @@ header, footer {
   font-size: 1.5rem;
   font-weight: 600;
 }
-
 .posterImage {
   width: 100px;
 }
@@ -94,7 +94,6 @@ header, footer {
   background-color: var(--background-color);
 }
 
-
 h1 {
   color: var(--primary-color);
   font-weight: bolder !important;
@@ -105,7 +104,7 @@ form {
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  height: 100%;
+  /* height: 100%; */
 }
 
 .formElem {
@@ -187,6 +186,10 @@ button {
   cursor: pointer;
   margin-right: 5px;
 }
+.bodyWrap {
+  margin: 10px;
+  overflow-y: auto;
+}
 
 button:hover {
   background-color: var(--btn-color-hover);
@@ -201,20 +204,23 @@ button:hover {
   background-color: #f0f0f0;
 }
 
+.viewPort {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 65px 1fr 40px;
+}
+
 .footer {
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.2);
   background-color: var(--menu-bg-color);
   color: var(--menu-color);
   text-align: center;
   font-weight: bold;
   padding: 10px;
-  position: fixed;
+  /* position: fixed; */
   left: 0;
   bottom: 0;
-  width: 100%;
-}
-
-.footer a {
-  color: var(--menu-color-active);
+  width: calc(100%-20px);
 }
 
 .App {

@@ -1,8 +1,6 @@
-
-.episode-list {
+/* .episode-list {
   height: calc(100vh * 0.75);
-  overflow-y: auto;
-}
+} */
 
 ul {
   list-style-type: none;

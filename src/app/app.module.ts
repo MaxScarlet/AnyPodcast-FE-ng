@@ -19,7 +19,6 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { EpisodeFormComponent } from './components/episode-form/episode-form.component';
 import { EpisodesComponent } from './components/episodes/episodes.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
-import { FooterComponent } from './components/footer/footer.component';
 import { HomeComponent } from './components/home/home.component';
 import { ImageUploadComponent } from './components/image-upload/image-upload.component';
 import { NavComponent } from './components/nav/nav.component';
@@ -53,7 +52,6 @@ export function initializeGlobalService(
     AboutComponent,
     EpisodeFormComponent,
     PopupComponent,
-    FooterComponent,
     PopupMsgComponent,
     PodcastInfoComponent,
     FileUploadComponent,

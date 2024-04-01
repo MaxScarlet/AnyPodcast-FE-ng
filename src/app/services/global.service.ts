@@ -71,12 +71,6 @@ export class GlobalService {
     const userSub = await firstValueFrom(this.auth.user$);
     this.logWriter('userSub: ', userSub);
 
-    // this.auth.idTokenClaims$.subscribe((claims) => {
-    //   // console.log('claims', claims);
-    //   // console.log('claims-JWT', claims?.__raw);
-    //   if (claims) this.userToken = claims.__raw;
-    // });
-
     if (userSub && userSub.sub) {
       this.UserID = userSub.sub.split('|')[1];
 
@@ -114,26 +108,6 @@ export class GlobalService {
     }
   }
 
-  private timeStamp(): string {
-    const currentTime = new Date();
-    const hours = currentTime.getHours();
-    const minutes = currentTime.getMinutes();
-    const seconds = currentTime.getSeconds();
-    const milliseconds = currentTime.getMilliseconds();
-
-    // Format the time to display leading zeros if necessary
-    const formattedTime = `${hours < 10 ? '0' + hours : hours}:${
-      minutes < 10 ? '0' + minutes : minutes
-    }:${seconds < 10 ? '0' + seconds : seconds}.${
-      milliseconds < 10
-        ? '00' + milliseconds
-        : milliseconds < 100
-        ? '0' + milliseconds
-        : milliseconds
-    }`;
-
-    return formattedTime;
-  }
   public updateAppVar(newValue: string) {
     this._appVar.next(newValue);
   }

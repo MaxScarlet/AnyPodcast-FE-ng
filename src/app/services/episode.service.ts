@@ -2,18 +2,18 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environment';
+import { ServiceUserAuthorized } from './service-user-auth';
+import { AuthService } from '@auth0/auth0-angular';
 
 @Injectable({
   providedIn: 'root',
 })
-export class EpisodeService {
+export class EpisodeService extends ServiceUserAuthorized {
   private mainUrl: string = `${environment.episodeUrl}/episode`;
 
-  private headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-  });
-
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, public override auth: AuthService) {
+    super(auth);
+  }
 
   get<T>(podcastID: string): Observable<T[]> {
     const fullUrl: string = `${this.mainUrl}?PodcastID=${podcastID}`;

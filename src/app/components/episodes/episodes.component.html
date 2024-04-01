@@ -1,66 +1,74 @@
-
 <!-- TODO: Change into component instead of div  -->
-<div class="header">
-  <h1>Episodes</h1>
-  <button
-    class="fa fa-plus"
-    style="
-      font-size: medium !important;
-      padding-left: 13px;
-      padding-right: 13px;
-    "
-    title="Add new episode"
-    routerLink="/podcast/{{ this.globalService.PodcastID }}/episode/create"
-  ></button>
-  <div *ngIf="isLoading" class="loading-spinner">
-    <mat-progress-spinner
-      mode="indeterminate"
-      [diameter]="30"
-    ></mat-progress-spinner>
+<div class="bodyWrap">
+  <div class="header">
+    <h1>Episodes</h1>
+    <button
+      class="fa fa-plus"
+      style="
+        font-size: medium !important;
+        padding-left: 13px;
+        padding-right: 13px;
+      "
+      title="Add new episode"
+      routerLink="/podcast/{{ this.globalService.PodcastID }}/episode/create"
+    ></button>
+    <div *ngIf="isLoading" class="loading-spinner">
+      <mat-progress-spinner
+        mode="indeterminate"
+        [diameter]="30"
+      ></mat-progress-spinner>
+    </div>
   </div>
-</div>
 
-<div class="episode-list" *ngIf="!isLoading">
-  <ul>
-    <li
-      *ngFor="let episode of episodeList"
-      [class.draftWrapper]="episode.Title.includes('Untitled')"
-      [ngClass]="{ unpublished: !episode.IsVisible }"
-    >
-      <img
-        class="posterImage"
-        src="{{ episode.PosterName }}"
-        alt="episodePoster"
-      />
-      <div class="textWrapper">
-        <b>{{ episode.Title }}</b>
-        <p>{{ episode.Description }}</p>
-        <div>
-          <button
-            class="fa fa-edit"
-            routerLink="/podcast/{{ this.globalService.PodcastID }}/episode/{{
-              episode._id
-            }}"
-          ></button>
-          <button class="fa fa-remove" (click)="openPrompt(episode)"></button>
+  <div class="episode-list" *ngIf="!isLoading">
+    <ul>
+      <li
+        *ngFor="let episode of episodeList"
+        [class.draftWrapper]="episode.Title.includes('Untitled')"
+        [ngClass]="{ unpublished: !episode.IsVisible }"
+      >
+        <img
+          class="posterImage"
+          src="{{ episode.PosterName }}"
+          alt="episodePoster"
+        />
+        <div class="textWrapper">
+          <b>{{ episode.Title }}</b>
+          <p>{{ episode.Description }}</p>
+          <div>
+            <button
+              class="fa fa-edit"
+              routerLink="/podcast/{{ this.globalService.PodcastID }}/episode/{{
+                episode._id
+              }}"
+            ></button>
+            <button class="fa fa-remove" (click)="openPrompt(episode)"></button>
+          </div>
         </div>
-      </div>
-      <div class="eyeDateWrapper">
-        <b *ngIf="episode.Title.includes('Untitled')">Draft</b>
-        <div
-          class="episode-visible fa"
-          [ngClass]="{
+        <div class="eyeDateWrapper">
+          <b *ngIf="episode.Title.includes('Untitled')">Draft</b>
+          <div
+            class="episode-visible fa"
+            [ngClass]="{
             'fa-eye': episode.IsVisible,
             'fa-eye-slash': !episode.IsVisible,
           }"
-          (click)="toggleVisible(episode)"
-        ></div>
-        <div class="episode-scheduled" *ngIf="episode.Scheduled">
-          <span class="fa fa-calendar"></span> {{ this.datePipe.transform( episode.Scheduled, 'dd MMM HH:mm') }}
+            (click)="toggleVisible(episode)"
+          ></div>
+          <div class="episode-scheduled" *ngIf="episode.Scheduled">
+            <span class="fa fa-calendar"></span>
+            {{ this.datePipe.transform(episode.Scheduled, "dd MMM HH:mm") }}
+          </div>
+          <div class="episode-created" *ngIf="!episode.IsVisible">
+            Created:
+            {{ this.datePipe.transform(episode.Created, "dd MMM HH:mm") }}
+          </div>
+          <div class="episode-created" *ngIf="episode.IsVisible">
+            Published:
+            {{ this.datePipe.transform(episode.Published, "dd MMM HH:mm") }}
+          </div>
         </div>
-        <div class="episode-created" *ngIf="!episode.IsVisible">Created: {{ this.datePipe.transform( episode.Created, 'dd MMM HH:mm') }}</div>
-        <div class="episode-created" *ngIf="episode.IsVisible">Published: {{ this.datePipe.transform( episode.Published, 'dd MMM HH:mm') }}</div>
-      </div>
-    </li>
-  </ul>
+      </li>
+    </ul>
+  </div>
 </div>
