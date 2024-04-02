@@ -1,20 +1,11 @@
-<!-- popup.component.html -->
-
 <div mat-dialog-content>
   <div class="headerCont">
-    <h1 mat-dialog-title>Podcasts</h1>
-    <button
-      class="fa fa-plus createBtn"
-      routerLink="/podcast/create"
-      title="Create"
-      (click)="closeDialog()"
-    ></button>
-    <div *ngIf="isLoading" class="loading-spinner">
-      <mat-progress-spinner
-        mode="indeterminate"
-        [diameter]="20"
-      ></mat-progress-spinner>
-    </div>
+    <app-app-header
+      [title]="'Podcasts'"
+      [isLoading]="isLoading"
+      [buttonLink]="'/podcast/create'"
+      (buttonClick)="closeDialog()"
+    />
   </div>
   <div *ngIf="!isLoading">
     <ul *ngFor="let podcast of podcastList">

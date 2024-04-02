@@ -16,7 +16,9 @@ h1 {
   align-items: baseline;
   justify-content: center;
   background-color: rgb(208, 208, 208);
+  padding-top: 10px;
 }
+
 .selected {
   background-color: rgb(206, 206, 206);
   border: 1px solid rgb(206, 206, 206);
@@ -33,10 +35,6 @@ ul {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.createBtn {
-  margin-left: 20px;
-  margin-top: 10px;
 }
 .closeBtn {
   justify-content: center;

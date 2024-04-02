@@ -1,0 +1,16 @@
+<div class="header">
+  <h1>{{ title }}</h1>
+  <button
+    class="fa fa-plus headerBtn"
+    title="Add new {{ buttonText }}"
+    routerLink="{{ buttonLink }}"
+    *ngIf="buttonLink"
+    (click)="onButtonClick()"
+  ></button>
+  <div *ngIf="isLoading" class="loading-spinner">
+    <mat-progress-spinner
+      mode="indeterminate"
+      [diameter]="diameter"
+    ></mat-progress-spinner>
+  </div>
+</div>

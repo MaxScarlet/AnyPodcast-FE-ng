@@ -1,16 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Calendar, CalendarOptions, EventInput } from '@fullcalendar/core';
-import { co } from '@fullcalendar/core/internal-common';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { Episode } from 'src/app/models/Episode';
 import { LogLevel } from 'src/app/models/LogLevel';
-import { Podcast } from 'src/app/models/Podcast';
 import { EpisodeService } from 'src/app/services/episode.service';
 import { GlobalService } from 'src/app/services/global.service';
-import { PodcastService } from 'src/app/services/podcast.service';
-import { PopupService } from 'src/app/services/popup.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,7 +24,7 @@ export class DashboardComponent {
     private episodeService: EpisodeService,
     private globalService: GlobalService,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.calendarOptions = {
@@ -40,9 +36,9 @@ export class DashboardComponent {
         center: 'title',
         right: '',
       },
-      eventTimeFormat: { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' },//, meridiem: false
+      eventTimeFormat: { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' },
       eventClick: this.handleEventClick.bind(this),
-      datesSet: this.handleMonthChange.bind(this)
+      datesSet: this.handleMonthChange.bind(this),
     };
     this.fetchEpisodes();
   }

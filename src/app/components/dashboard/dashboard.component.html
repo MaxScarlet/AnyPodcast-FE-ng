@@ -1,13 +1,10 @@
-<div class="header">
-  <h1>Dashboard</h1>
-  <div *ngIf="isLoading" class="loading-spinner">
-    <mat-progress-spinner
-      mode="indeterminate"
-      [diameter]="30"
-    ></mat-progress-spinner>
-  </div>
-</div>
+<div class="bodyWrap">
+  <app-app-header [title]="'Dashboard'" [isLoading]="isLoading" />
 
-<div class="container">
-  <full-calendar [options]="calendarOptions" *ngIf="!isLoading"></full-calendar>
+  <div class="container">
+    <full-calendar
+      [options]="calendarOptions"
+      *ngIf="!isLoading"
+    ></full-calendar>
+  </div>
 </div>

@@ -1,24 +1,10 @@
 <!-- TODO: Change into component instead of div  -->
 <div class="bodyWrap">
-  <div class="header">
-    <h1>Episodes</h1>
-    <button
-      class="fa fa-plus"
-      style="
-        font-size: medium !important;
-        padding-left: 13px;
-        padding-right: 13px;
-      "
-      title="Add new episode"
-      routerLink="/podcast/{{ this.globalService.PodcastID }}/episode/create"
-    ></button>
-    <div *ngIf="isLoading" class="loading-spinner">
-      <mat-progress-spinner
-        mode="indeterminate"
-        [diameter]="30"
-      ></mat-progress-spinner>
-    </div>
-  </div>
+  <app-app-header
+    [title]="'Episodes'"
+    [isLoading]="isLoading"
+    [buttonLink]="'/podcast/{{ this.globalService.PodcastID }}/episode/create'"
+  />
 
   <div class="episode-list" *ngIf="!isLoading">
     <ul>

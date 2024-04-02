@@ -33,6 +33,7 @@ import { LoggerService } from './services/logger.service';
 import { PodcastService } from './services/podcast.service';
 import { PopupService } from './services/popup.service';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { AppHeaderComponent } from './components/app-header/app-header.component';
 
 export function initializeGlobalService(
   globalService: GlobalService
@@ -57,6 +58,7 @@ export function initializeGlobalService(
     FileUploadComponent,
     ToggleSliderComponent,
     ImageUploadComponent,
+    AppHeaderComponent,
   ],
 
   imports: [
@@ -75,7 +77,7 @@ export function initializeGlobalService(
     MatDialogModule,
     MatSliderModule,
     MatProgressSpinnerModule,
-    FullCalendarModule
+    FullCalendarModule,
   ],
   providers: [
     EpisodeService,

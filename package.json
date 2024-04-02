@@ -1,6 +1,7 @@
 {
   "name": "any-podcast-ng",
-  "version": "0.0.0",
+  "author": "Maxim Kulik",
+  "version": "0.0.4",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 3060",
@@ -31,14 +32,16 @@
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
     "@auth0/auth0-angular": "^2.2.3",
+    "@fortawesome/fontawesome-free": "^6.5.1",
     "@fullcalendar/angular": "^6.1.10",
     "@fullcalendar/core": "^6.1.11",
     "@fullcalendar/daygrid": "^6.1.11",
     "@fullcalendar/interaction": "^6.1.11",
+    "@types/pluralize": "^0.0.33",
     "font-awesome": "^4.7.0",
-    "@fortawesome/fontawesome-free": "^6.5.1",
     "ng-datetime-picker": "^0.0.0",
     "ngx-cookie-service": "^16.0.0",
+    "pluralize": "^8.0.0",
     "rxjs": "~7.8.0",
     "zone.js": "~0.13.0"
   },
